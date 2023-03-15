@@ -1,8 +1,17 @@
 #include "Link22Center.h"
-void Link22Center::decode_Link22(std::string msg, int m = 0, int n = 0, int p = 0) {
+#include "Utils/MsgUtil.h"
 
+void Link22Center::encoder_Link22(const std::string& msg, int n, int m, int p)
+{
+	constructCenter.constructMessage(msg, n, m, p);
 }
 
-void Link22Center::encode_Link16() {
-
+void Link22Center::decoder_Link22(std::string& msg, int& n, int& m, int& p)
+{
+    std::string dataStr;
+    msgUtil.getDataFromFile(MsgUtil::FILE_NAME, dataStr);
+    int arrayNum = dataStr.length() / 8;
+    uint8_t *data = msgUtil.StrToCharArray(dataStr, arrayNum);
+    int symbolNum = arrayNum / 36;
+	constructCenter.crackMessage(data, symbolNum, msg, n, m, p);
 }

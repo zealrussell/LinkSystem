@@ -2,14 +2,14 @@
 // Created by zeal on 2022/12/2.
 //
 
-#ifndef LINKSYSTEM_CONSTRUCTCENTER_H
-#define LINKSYSTEM_CONSTRUCTCENTER_H
+#ifndef LINK22_CONSTRUCTCENTER_H
+#define LINK22_CONSTRUCTCENTER_H
 
 #include <vector>
 
 #include "../Utils/MsgUtil.h"
 #include "../Utils/CrcUtil.h"
-#include "../Utils/AES.h"
+#include "../Utils/AESUtil.h"
 #include "../Utils/RSInclude/rs.hpp"
 
 class ConstructCenter {
@@ -18,8 +18,9 @@ class ConstructCenter {
         ~ConstructCenter();
 
         // 入口
-        uint8_t *constructMessage();
-        void crackMessage(const uint8_t *data);
+        void constructMessage(const std::string &msg, int n = 0,int m = 0, int p = 0);
+        // 解密
+        void crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p);
         // 报文类型
         std::string typeMap[4][10][11];
 
@@ -55,4 +56,4 @@ class ConstructCenter {
 
 
 
-#endif //LINKSYSTEM_CONSTRUCTCENTER_H
+#endif //LINK22_CONSTRUCTCENTER_H

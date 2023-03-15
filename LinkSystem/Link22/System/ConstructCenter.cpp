@@ -49,7 +49,7 @@ uint8_t *ConstructCenter::beginDisassemble(const uint8_t *data) {
     // 通过比较crcCode，判断传输过程中是否发生错误
     bool crcFlag = beginDeCrc(crcCode, aesCode, 18);
     if (!crcFlag) {
-        printf("CRC码校验错误！！！\n");
+        printf("ERROR:: CRC code checked failed!!!\n");
         return nullptr;
     }
 
@@ -205,51 +205,49 @@ uint8_t *ConstructCenter::beginDeAes(const uint8_t *data, int arrayNum) {
  * @return
  */
 
-uint8_t *ConstructCenter::constructMessage() {
-    printf("Please selece Link22 type: \n");
-    printf("1. F0n.m-p    2. Fn-p     3. Fn\n");
-    int n, m, p, type;
+void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int p) {
+    // printf("Please selece Link22 type: \n");
+    // printf("1. F0n.m-p    2. Fn-p     3. Fn\n");
     uint8_t *res = nullptr;
-    std::cin >> type;
+    int type = msgUtil.getTypeByNMP(n, m, p);
+
     if (type == 1) {
         printf("F0n.m-p message will be construct....\n");
-        printf("Please input n m p by order:\n");
-        std::cin >> n >> m >> p;
+        // printf("Please input n m p by order:\n");
+        // std::cin >> n >> m >> p;
         // 更改秘钥消息
         if (n == 0 && m == 7 && p == 10) {
-            const uint8_t *msg;
-            scanf("%s",msg);
-            changeKey(msg);
-            return nullptr;
+            const uint8_t *message = msgUtil.StrToCharArray(msg, msg.length());
+            changeKey(message);
+            delete[] message;
+            return;
         } else if (n == 0 && m == 1 && p == 2) {
-            printf("Please input data message：\n");
-            std::string message;
-            std::cin >> message;
-            res = beginConstruct(message, 1, n ,p ,m);
+            // printf("Please input data message：\n");
+            // std::string message;
+            // std::cin >> message;
+            res = beginConstruct(msg, 1, n ,p ,m);
         }
     } else if (type == 2) {
-        printf("please input  n p by order:\n");
-        std::cin >> n >> p;
-        printf("Please input data message: ");
-        std::string message;
-        std::cin >> message;
-        res = beginConstruct(message, 2, n ,p);
+        // printf("please input  n p by order:\n");
+        // std::cin >> n >> p;
+        // printf("Please input data message: ");
+        // std::string message;
+        // std::cin >> message;
+        res = beginConstruct(msg, 2, n ,p);
 
     } else if (type == 3) {
-        printf("Please input n by order:\n");
-        std::cin >> n;
-        std::string message;
-        std::cin >> message;
-        res = beginConstruct(message, 3, n);
+        // printf("Please input n by order:\n");
+        // std::cin >> n;
+        // std::string message;
+        // std::cin >> message;
+        res = beginConstruct(msg, 3, n);
     }
-
-    return res;
 }
 
 // 填充，生成F系列消息
 uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n, int p, int m) {
     // 1. 将输入的string消息转换成01字符串
-    printf("\n待转换的消息为：%s\n",msg.c_str());
+    printf("\n The message needed to be constructed is: %s\n",msg.c_str());
     std::string str = msgUtil.StrToBitStr(msg);
     printf("补齐前的%lu比特二进制消息为：%s\n",str.length(),str.c_str());
     // 2. 计算切分的报文数
@@ -260,7 +258,7 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
     else MSGLEN = 62;
     int num = 0;
     while (num * DMSGLEN < strLen) num++;
-    printf("将生成%d个码元消息\n",num);
+    printf("%d data will be constructed \n",num);
     uint8_t *temp = new uint8_t [num * 36 * sizeof(uint8_t)];
     uint8_t *res = temp;
     // 3. 分段填充
@@ -325,10 +323,11 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
         delete data;
     }
 
-    printf("最终的结果为：");
+    printf("The final %d symbol data after encode are: ", num);
+    // 1symbol = 144bit = 36uint8
     print(res, 36 * num);
     printf("\n\n\n");
-
+    msgUtil.saveToFile(MsgUtil::FILE_NAME, res, 36 * num);
     return res;
 }
 
@@ -336,17 +335,17 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
  * 解密函数
  * @param data 待解密是数据
  */
-void ConstructCenter::crackMessage(const uint8_t *data) {
-    int arrayNum;
-
-    printf("请输入码元个数：");
-    std::cin >> arrayNum;
-    printf("原数据：");
-    print(data, 36 * arrayNum);
+void ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p) {
+    // int arrayNum;
+    // printf("请输入码元个数：");
+    // std::cin >> arrayNum;
+    printf("Origin %d data: ", symbolNum);
+    print(data, 36 * symbolNum);
 
     std::string message;
-    // 1.分为每 36 传入
-    for (int i = 0; i < 36 * arrayNum; i += 36) {
+    bool flag = true;
+    // 1.分为每symbol传入
+    for (int i = 0; i < 36 * symbolNum; i += 36) {
         uint8_t tmp[36];
         memcpy(tmp, data + i, 36 * sizeof(uint8_t));
         // 2. 解码成 18，即两个 72bit 数据
@@ -357,11 +356,16 @@ void ConstructCenter::crackMessage(const uint8_t *data) {
         if (str.length() == 144) {
             message += msgUtil.getDataFromMessage(str.substr(0, 72));
             message += msgUtil.getDataFromMessage(str.substr(72,72));
+            if (flag) {
+                msgUtil.getTypeFromMessage(str.substr(0, 72),n,m,p);
+                flag != flag;
+            }
         }
     }
+
     // 将二进制消息转换成字符消息
-    std::string res = msgUtil.BitStrToStr(message);
-    printf("The message after decode is ：%s\n", res.c_str());
+    msg = msgUtil.BitStrToStr(message);
+    printf("DECOD:: The real message is: %s\n", msg.c_str());
 }
 
 

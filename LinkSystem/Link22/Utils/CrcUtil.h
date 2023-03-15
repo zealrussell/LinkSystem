@@ -2,8 +2,8 @@
 // Created by zeal on 2022/12/2.
 //
 
-#ifndef LINKSYSTEM_CRCUTIL_H
-#define LINKSYSTEM_CRCUTIL_H
+#ifndef LINK22_CRCUTIL_H
+#define LINK22_CRCUTIL_H
 #include <iostream>
 #include <bitset>
 typedef unsigned short int uint16;
@@ -16,4 +16,4 @@ class CrcUtil {
 };
 
 
-#endif //LINKSYSTEM_CRCUTIL_H
+#endif //LINK22_CRCUTIL_H

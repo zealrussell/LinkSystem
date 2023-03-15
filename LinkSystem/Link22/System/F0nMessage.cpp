@@ -22,7 +22,7 @@ F0nMessage::F0nMessage(const std::string &msg, int N, int M, int P) {
     setP(P);
     setLength(msg.length());
     setMessage(msg);
-    printf("F0%d.%d-%d message has been constructed：%s\n",N, M, P, getStrData().c_str());
+    printf("F0%d.%d-%d message has been constructed: %s\n",N, M, P, getStrData().c_str());
 }
 
 std::string F0nMessage::getStrData() {

@@ -6,5 +6,7 @@
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    LinkCenter center;
+    center.From16to22();
+    std::cin.get();
 }

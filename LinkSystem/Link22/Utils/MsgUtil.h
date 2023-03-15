@@ -2,14 +2,15 @@
 // Created by zeal on 2022/12/8.
 //
 
-#ifndef LINKSYSTEM_MSGUTIL_H
-#define LINKSYSTEM_MSGUTIL_H
+#ifndef LINK22_MSGUTIL_H
+#define LINK22_MSGUTIL_H
 #include <iostream>
 #include <bitset>
 #include <string>
 class MsgUtil {
 public:
-    uint8_t* StrToCharArray(std::string &str_data, int char_length);
+
+    uint8_t* StrToCharArray(const std::string &str_data, int char_length);
 
     std::string StrToBitStr(const std::string &data);
     std::string BitStrToStr(const std::string &data);
@@ -19,7 +20,19 @@ public:
     std::string CharArrayToBitStr(const uint8_t *data, int char_length);
     std::bitset<72> *CharArrayToBitset(const uint8_t *charArray, int arraySize);
 
+    // 从link22消息比特中截取有效信息
     std::string getDataFromMessage(const std::string &message);
+    // 从link22消息比特中接截取消息类型
+    void getTypeFromMessage(const std::string &message, int &n, int &m, int &p);
+    // 从标号中获取类型
+    int getTypeByNMP(int &n, int &m, int &p);
+
+
+    // 将内容保存至文件中
+    void saveToFile(const std::string &FILE_NAME, const uint8_t *data, int dataNum);
+    void getDataFromFile(const std::string &FILENAME, std::string &data);
+    void deleteFile(const std::string &FILE_NAME);
+    static const std::string FILE_NAME;
 };
 
 template<size_t N> std::string MsgUtil::BitsetToStr(const std::bitset<N> &b) {
@@ -38,7 +51,7 @@ template<size_t N>
 uint8_t *MsgUtil::BitsetToCharArray(const std::bitset<N> *b, int arraySize) {
     int len = N * arraySize;
     if (len % 8 != 0) {
-        printf("输入字符串长度%n有误，需8bit整数倍",len);
+        printf("The input string length %n is not porperty, 8bit needed",len);
         return nullptr;
     }
     // 1.将bitset转换成字符串
@@ -58,4 +71,4 @@ uint8_t *MsgUtil::BitsetToCharArray(const std::bitset<N> *b, int arraySize) {
     return data;
 }
 
-#endif //LINKSYSTEM_MSGUTIL_H
+#endif //LINK22_MSGUTIL_H

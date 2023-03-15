@@ -3,13 +3,17 @@
 //
 
 #include "MsgUtil.h"
+#include <fstream>
 #include <string>
+
+const std::string MsgUtil::FILE_NAME = "./data.txt";
+
 //输入字符串str_data长度必须为8的整数倍
 //功能：将二进制字符串“0000000100000010”按8bit一组合并转化{ "1", "2" }的字符数组
-uint8_t *MsgUtil::StrToCharArray(std::string &str_data, int char_length) {
+uint8_t *MsgUtil::StrToCharArray(const std::string &str_data, int char_length) {
     size_t len = str_data.length();
     if (len % 8 != 0) {
-        std::cout << "warn input";
+        std::cout << "Incorrect input";
         return nullptr;
     }
     uint8_t* data = new uint8_t[char_length]();
@@ -93,7 +97,7 @@ std::bitset<72> *MsgUtil::CharArrayToBitset(const uint8_t *charArray, int arrayS
 std::string MsgUtil::getDataFromMessage(const std::string &message) {
     // F系列消息 系列指示符为 0
     if (message.length() != 72 || message[0] != '0') return "";
-    printf("待提取的消息为 %S", message.c_str());
+    printf("The messages before extract: %s \n", message.c_str());
     // 1. 判断M消息类型
     std::string type = message.substr(1,3);
     int pos = 0;
@@ -112,11 +116,70 @@ std::string MsgUtil::getDataFromMessage(const std::string &message) {
     int len = std::stoi(message.substr(pos,6),0,2);
     // 3. 获取消息字数据
     std::string res = message.substr(72 - len, len);
-    printf("提取出的消息数据：%s\n",res.c_str());
+    printf("The messages after extract: %s\n",res.c_str());
 
     return res;
 }
 
+/**
+ * 从F系列消息字01字符串中获取报文类型
+ * @param message
+ * @return
+ */
+void MsgUtil::getTypeFromMessage(const std::string &message, int &n, int &m, int &p) {
+    // F系列消息 系列指示符为 0
+    if (message.length() != 72 || message[0] != '0') return;
+    printf("The messages type needed to get be from link22 are %s \n", message.c_str());
+    // 1. 判断M消息类型
+    std::string type = message.substr(1,3);
+    int pos = 0;
+    n = 0;
+    m = 2;
+    p = 7;
+    // 标识指示符
+    if (type == "000") {
+        // F0n.m-p
+        pos = 11;
+    } else if (type == "001" || type == "100" || type == "101") {
+        // Fn-p
+        pos = 5;
+    } else if (type == "010" || type == "011" || type == "110") {
+        // Fn
+        pos = 4;
+    } else return;
 
+}
 
+int MsgUtil::getTypeByNMP(int &n, int &m, int &p) {
+    return 1;
+}
 
+void MsgUtil::saveToFile(const std::string &FILE_NAME, const uint8_t *data, int dataNum) {
+    std::ofstream fout;
+    fout.open(FILE_NAME, std::ofstream::out);
+    if (fout.is_open() == false) {
+        std::cout << "ERROR:: open the file " << FILE_NAME << "failed!!   " << std::endl;
+        return;
+    }
+    std::cout << "FILE:: begin save data to " <<FILE_NAME << std::endl;
+    std::string msg = CharArrayToBitStr(data, dataNum);
+    fout << msg;
+    fout.close();
+    std::cout << "FILE:: save finish " << std::endl << std::endl;
+}
+
+void MsgUtil::getDataFromFile(const std::string &FILENAME, std::string &data) {
+    std::ifstream fin;
+    fin.open(FILENAME, std::ios::in);
+    if (fin.is_open() == false) {
+        std::cout << "Error:: open file " << FILENAME << "failed!!! " << std::endl;
+        return;
+    }
+    //每次读一行
+    std::cout << "The data readed from txt are: " << std::endl;
+    while (fin >> data) {
+        std::cout << data <<  std::endl;
+    }
+    std::cout << "total:" << data.length() << std::endl << std::endl;
+    fin.close();
+}

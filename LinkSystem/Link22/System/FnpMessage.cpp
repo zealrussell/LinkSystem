@@ -5,7 +5,7 @@
 #include "FnpMessage.h"
 
 FnpMessage::FnpMessage() {
-    printf(" Fn-p has benn constucted \n");
+    printf("Fn-p has benn constucted \n");
     data.reset(0);
     data.reset(2);
 }
@@ -19,7 +19,7 @@ FnpMessage::FnpMessage(const std::string &msg, int N, int P) {
     setP(P);
     setLength(msg.length());
     setMessage(msg);
-    printf("F%d-%d message has been constructed：%s\n",N, P, getBitsetData());
+    printf("F%d-%d message has been constructed: %s\n",N, P, getBitsetData());
 }
 
 std::string FnpMessage::getStrData() {

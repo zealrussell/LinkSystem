@@ -1,15 +1,15 @@
-#ifndef __AES_H__
-#define __AES_H__
+#ifndef LINK22_AESUTIL_H
+#define LINK22_AESUTIL_H
 
 #include <cstdio>
 
 extern void print(unsigned char* state, int len);
 
-class AES
+class AESUtil
 {
 public:
-    AES(unsigned char* key = NULL);
-    virtual ~AES();
+    AESUtil(unsigned char* key = NULL);
+    virtual ~AESUtil();
     void SetKey(unsigned char *key);
     unsigned char* Cipher(unsigned char* input, unsigned char* output);
     unsigned char* InvCipher(unsigned char* input, unsigned char* output);
@@ -37,7 +37,7 @@ private:
 enum AESMode_t { MODE_OFB = 1, MODE_CFB, MODE_CBC, MODE_ECB };
 class AESModeOfOperation {
 private:
-    AES *m_aes;
+    AESUtil *m_aes;
     AESMode_t	  m_mode;
     unsigned char m_key[16];
     unsigned char m_iv[16];

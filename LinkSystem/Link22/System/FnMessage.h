@@ -2,8 +2,8 @@
 // Created by zeal on 2023/1/24.
 //
 
-#ifndef LINKSYSTEM_FNMESSAGE_H
-#define LINKSYSTEM_FNMESSAGE_H
+#ifndef LINK22_FNMESSAGE_H
+#define LINK22_FNMESSAGE_H
 
 #include <iostream>
 #include <bitset>
@@ -26,4 +26,4 @@ class FnMessage {
 };
 
 
-#endif //LINKSYSTEM_FNMESSAGE_H
+#endif //LINK22_FNMESSAGE_H

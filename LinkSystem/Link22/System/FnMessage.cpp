@@ -5,7 +5,7 @@
 #include "FnMessage.h"
 
 FnMessage::FnMessage() {
-    printf(" Fn消息被构造\n");
+    printf(" Fn message has been constructed \n");
     data.reset(0);
     data.reset(2);
 }
@@ -17,7 +17,7 @@ FnMessage::FnMessage(const std::string &msg, int N) {
     setN(N);
     setLength(msg.length());
     setMessage(msg);
-    printf("构造了 F%d 消息：%s\n", N, getStrData().c_str());
+    printf("F%d message has been constructed: %s\n", N, getStrData().c_str());
 }
 
 std::string FnMessage::getStrData() {

@@ -50,7 +50,7 @@ public:
 		memset(symbol_RS_word, 0, sizeof(symbol) * codeLength);
 		memcpy(symbol_RS_word, symbol_word, sizeof(symbol) * dataLength);
 
-		if (!RS(codeLength, dataLength, message, symbol_RS_word)) {
+		if (!Link16_RS(codeLength, dataLength, message, symbol_RS_word)) {
 			std::cout << "RS±àÂë³É¹¦" << std::endl;
 		}
 		else {

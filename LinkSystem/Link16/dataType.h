@@ -14,7 +14,7 @@ typedef unsigned long long	uint64_t;	//64位无符号整数
 
 typedef bitset<5>	symbol;		//5bit = 1Symbol, 注意sizeof(symbol) = 4
 
-constexpr auto FILENAME = R"(D:\C++WorkSpace\Link16\data.txt)";
+constexpr auto FILENAME = R"(./data.txt)";
 
 const unsigned int BLOCK_BYTES_LENGTH = 16 * sizeof(unsigned char);
 

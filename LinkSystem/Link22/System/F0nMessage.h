@@ -2,8 +2,8 @@
 // Created by zeal on 2023/1/11.
 //
 
-#ifndef LINKSYSTEM_F0NMESSAGE_H
-#define LINKSYSTEM_F0NMESSAGE_H
+#ifndef LINK22_F0NMESSAGE_H
+#define LINK22_F0NMESSAGE_H
 #include <iostream>
 #include <bitset>
 
@@ -30,4 +30,4 @@ class F0nMessage {
 };
 
 
-#endif //LINKSYSTEM_F0NMESSAGE_H
+#endif //LINK22_F0NMESSAGE_H

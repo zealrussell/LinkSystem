@@ -4,7 +4,13 @@
 class Link22Center
 {
 public:
-	void decode_Link22(std::string msg,int m = 0, int n = 0, int p = 0);
-	void encode_Link16(std::string data);
+	// ¼ÓÃÜÆ÷
+	void encoder_Link22(const std::string &msg, int n = 0, int m = 0, int p = 0);
+    // ½âÃÜÆ÷
+	void decoder_Link22(std::string &msg, int &n, int &m, int &p);
+
+private:
+    ConstructCenter constructCenter;
+    MsgUtil msgUtil;
 };
 

@@ -2,8 +2,8 @@
 // Created by zeal on 2023/1/24.
 //
 
-#ifndef LINKSYSTEM_FNPMESSAGE_H
-#define LINKSYSTEM_FNPMESSAGE_H
+#ifndef LINK22_FNPMESSAGE_H
+#define LINK22_FNPMESSAGE_H
 #include<iostream>
 #include <bitset>
 
@@ -28,4 +28,4 @@ private:
 };
 
 
-#endif //LINKSYSTEM_FNPMESSAGE_H
+#endif //LINK22_FNPMESSAGE_H

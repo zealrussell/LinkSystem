@@ -1,9 +1,9 @@
-#include "AES.h"
+#include "AESUtil.h"
 #include <cstdio>
 #include <cstring>
 #include <cassert>
 
-AES::AES(unsigned char* key)
+AESUtil::AESUtil(unsigned char* key)
 {
     unsigned char sBox[] =
             { /*  0    1    2    3    4    5    6    7    8    9    a    b    c    d    e    f */
@@ -50,16 +50,16 @@ AES::AES(unsigned char* key)
     }
 }
 
-AES::~AES()
+AESUtil::~AESUtil()
 {
 
 }
 
-void AES::SetKey (unsigned char *key) {
+void AESUtil::SetKey (unsigned char *key) {
     KeyExpansion(key, w);
 }
 
-unsigned char* AES::Cipher(unsigned char* input, unsigned char *output)
+unsigned char* AESUtil::Cipher(unsigned char* input, unsigned char *output)
 {
     unsigned char state[4][4];
     int i,r,c;
@@ -93,7 +93,7 @@ unsigned char* AES::Cipher(unsigned char* input, unsigned char *output)
     return output;
 }
 
-unsigned char* AES::InvCipher(unsigned char* input, unsigned char *output)
+unsigned char* AESUtil::InvCipher(unsigned char* input, unsigned char *output)
 {
     unsigned char state[4][4];
     int i,r,c;
@@ -128,7 +128,7 @@ unsigned char* AES::InvCipher(unsigned char* input, unsigned char *output)
     return output;
 }
 
-void* AES::Cipher(void* input,  void *output, int length)
+void* AESUtil::Cipher(void* input,  void *output, int length)
 {
     unsigned char* in = (unsigned char*) input;
     unsigned char* out = (unsigned char*) output;
@@ -145,7 +145,7 @@ void* AES::Cipher(void* input,  void *output, int length)
     return output;
 }
 
-void* AES::InvCipher(void* input, void* output, int length)
+void* AESUtil::InvCipher(void* input, void* output, int length)
 {
     unsigned char* in = (unsigned char*) input;
     unsigned char* out = (unsigned char*) output;
@@ -157,7 +157,7 @@ void* AES::InvCipher(void* input, void* output, int length)
     return output;
 }
 
-void AES::KeyExpansion(unsigned char* key, unsigned char w[][4][4])
+void AESUtil::KeyExpansion(unsigned char* key, unsigned char w[][4][4])
 {
     int i,j,r,c;
     unsigned char rc[] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36};
@@ -195,7 +195,7 @@ void AES::KeyExpansion(unsigned char* key, unsigned char w[][4][4])
     }
 }
 
-unsigned char AES::FFmul(unsigned char a, unsigned char b)
+unsigned char AESUtil::FFmul(unsigned char a, unsigned char b)
 {
     unsigned char bw[4];
     unsigned char res=0;
@@ -219,7 +219,7 @@ unsigned char AES::FFmul(unsigned char a, unsigned char b)
     return res;
 }
 
-void AES::SubBytes(unsigned char state[][4])
+void AESUtil::SubBytes(unsigned char state[][4])
 {
     int r,c;
     for(r=0; r<4; r++)
@@ -231,7 +231,7 @@ void AES::SubBytes(unsigned char state[][4])
     }
 }
 
-void AES::ShiftRows(unsigned char state[][4])
+void AESUtil::ShiftRows(unsigned char state[][4])
 {
     unsigned char t[4];
     int r,c;
@@ -248,7 +248,7 @@ void AES::ShiftRows(unsigned char state[][4])
     }
 }
 
-void AES::MixColumns(unsigned char state[][4])
+void AESUtil::MixColumns(unsigned char state[][4])
 {
     unsigned char t[4];
     int r,c;
@@ -268,7 +268,7 @@ void AES::MixColumns(unsigned char state[][4])
     }
 }
 
-void AES::AddRoundKey(unsigned char state[][4], unsigned char k[][4])
+void AESUtil::AddRoundKey(unsigned char state[][4], unsigned char k[][4])
 {
     int r,c;
     for(c=0; c<4; c++)
@@ -280,7 +280,7 @@ void AES::AddRoundKey(unsigned char state[][4], unsigned char k[][4])
     }
 }
 
-void AES::InvSubBytes(unsigned char state[][4])
+void AESUtil::InvSubBytes(unsigned char state[][4])
 {
     int r,c;
     for(r=0; r<4; r++)
@@ -292,7 +292,7 @@ void AES::InvSubBytes(unsigned char state[][4])
     }
 }
 
-void AES::InvShiftRows(unsigned char state[][4])
+void AESUtil::InvShiftRows(unsigned char state[][4])
 {
     unsigned char t[4];
     int r,c;
@@ -309,7 +309,7 @@ void AES::InvShiftRows(unsigned char state[][4])
     }
 }
 
-void AES::InvMixColumns(unsigned char state[][4])
+void AESUtil::InvMixColumns(unsigned char state[][4])
 {
     unsigned char t[4];
     int r,c;
@@ -337,7 +337,7 @@ AESModeOfOperation::AESModeOfOperation() {
     m_aes = NULL;
     memset(m_key, 0, 16);
     memset(m_iv, 0, 16);
-    m_aes = new AES(m_key);
+    m_aes = new AESUtil(m_key);
     assert(m_aes != NULL);
 }
 
