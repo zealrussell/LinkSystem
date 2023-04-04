@@ -123,37 +123,60 @@ std::string MsgUtil::getDataFromMessage(const std::string &message) {
 
 /**
  * 从F系列消息字01字符串中获取报文类型
- * @param message
+ * @param messagetype
  * @return
  */
-void MsgUtil::getTypeFromMessage(const std::string &message, int &n, int &m, int &p) {
+void MsgUtil::getTypeFromMessage(const std::string &message, int &n_out, int &m_out, int &p_out) {
     // F系列消息 系列指示符为 0
     if (message.length() != 72 || message[0] != '0') return;
     printf("The messages type needed to get be from link22 are %s \n", message.c_str());
     // 1. 判断M消息类型
-    std::string type = message.substr(1,3);
-    int pos = 0;
-    n = 0;
-    m = 2;
-    p = 7;
+    
+    n_out = 0;
+    m_out = 2;
+    p_out = 7;
+
+    if (message[0] != 0) return;
+
+    // std::string n = message.substr(1, 4);
+    int n = getNumFromLinkMsg(message.substr(1, 4));
     // 标识指示符
-    if (type == "000") {
-        // F0n.m-p
-        pos = 11;
-    } else if (type == "001" || type == "100" || type == "101") {
+    // F0n.m-p
+    if (n == 0) {
+        n_out = getNumFromLinkMsg(message.substr(4, 6));
+        m_out = getNumFromLinkMsg(message.substr(6, 9));
+        p_out = getNumFromLinkMsg(message.substr(9, 11));
         // Fn-p
-        pos = 5;
-    } else if (type == "010" || type == "011" || type == "110") {
-        // Fn
-        pos = 4;
+    } else if (n == 1 || n == 4 || n == 5) {
+        n_out = n;
+        m_out = -1;
+        p_out = getNumFromLinkMsg(message.substr(4, 5));
+    // Fn
+    } else if (n == 2 || n == 3 || n == 6) {
+       
+        n_out = n;
     } else return;
 
 }
 
-int MsgUtil::getTypeByNMP(int &n, int &m, int &p) {
+int MsgUtil::getTypeByNPM(int n, int p, int m)
+{
+    std::string key = n + "_" + m + '_' + p;
+    if (m == -1 && p == -1) {
+        return 3;
+    }
+    else if (m == -1) {
+        return 2;
+    }
     return 1;
 }
 
+int MsgUtil::getNumFromLinkMsg(std::string msg) {
+    std::reverse(msg.begin(), msg.end());
+    return std::stoi(msg, NULL, 2);
+}
+///////////////////////////////////////////////
+ 
 void MsgUtil::saveToFile(const std::string &FILE_NAME, const uint8_t *data, int dataNum) {
     std::ofstream fout;
     fout.open(FILE_NAME, std::ofstream::out);

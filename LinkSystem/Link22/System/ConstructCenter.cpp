@@ -209,12 +209,10 @@ void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
     // printf("Please selece Link22 type: \n");
     // printf("1. F0n.m-p    2. Fn-p     3. Fn\n");
     uint8_t *res = nullptr;
-    int type = msgUtil.getTypeByNMP(n, m, p);
+    int type = msgUtil.getTypeByNPM(n, p, m);
 
     if (type == 1) {
         printf("F0n.m-p message will be construct....\n");
-        // printf("Please input n m p by order:\n");
-        // std::cin >> n >> m >> p;
         // 更改秘钥消息
         if (n == 0 && m == 7 && p == 10) {
             const uint8_t *message = msgUtil.StrToCharArray(msg, msg.length());
@@ -222,24 +220,14 @@ void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
             delete[] message;
             return;
         } else if (n == 0 && m == 1 && p == 2) {
-            // printf("Please input data message：\n");
-            // std::string message;
-            // std::cin >> message;
+          
             res = beginConstruct(msg, 1, n ,p ,m);
+        } else {
+            res = beginConstruct(msg, 1, n, p, m);
         }
     } else if (type == 2) {
-        // printf("please input  n p by order:\n");
-        // std::cin >> n >> p;
-        // printf("Please input data message: ");
-        // std::string message;
-        // std::cin >> message;
         res = beginConstruct(msg, 2, n ,p);
-
     } else if (type == 3) {
-        // printf("Please input n by order:\n");
-        // std::cin >> n;
-        // std::string message;
-        // std::cin >> message;
         res = beginConstruct(msg, 3, n);
     }
 }
@@ -249,7 +237,7 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
     // 1. 将输入的string消息转换成01字符串
     printf("\n The message needed to be constructed is: %s\n",msg.c_str());
     std::string str = msgUtil.StrToBitStr(msg);
-    printf("补齐前的%lu比特二进制消息为：%s\n",str.length(),str.c_str());
+    printf("The %lu bit binary string before compeleted are: %s\n",str.length(),str.c_str());
     // 2. 计算切分的报文数
     int strLen = str.length();
     int MSGLEN;
