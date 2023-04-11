@@ -19,6 +19,13 @@ public:
     template<size_t N> uint8_t *BitsetToCharArray(const std::bitset<N> *b, int arraySize);
     std::string CharArrayToBitStr(const uint8_t *data, int char_length);
     std::bitset<72> *CharArrayToBitset(const uint8_t *charArray, int arraySize);
+
+    // 将内容保存至文件中
+    void saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum);
+    void getDataFromFile(const std::string& FILENAME, std::string& data);
+    void deleteFile(const std::string& FILE_NAME);
+
+    static const std::string FILE_NAME;
 };
 
 template<size_t N> std::string Link11MsgUtil::BitsetToStr(const std::bitset<N> &b) {
@@ -56,5 +63,6 @@ uint8_t *Link11MsgUtil::BitsetToCharArray(const std::bitset<N> *b, int arraySize
     }
     return data;
 }
+
 
 #endif //LINK11_MSGUTIL_H

@@ -3,7 +3,9 @@
 //
 
 #include "Link11MsgUtil.h"
+#include <fstream>
 
+const std::string Link11MsgUtil::FILE_NAME = "./data.txt";
 
 // 将二进制字符串“0000000100000010” 按 8bit 一组合并转化的字符数组
 uint8_t *Link11MsgUtil::StrToCharArray(std::string &str_data, int char_length) {
@@ -87,4 +89,37 @@ std::bitset<72> *Link11MsgUtil::CharArrayToBitset(const uint8_t *charArray, int 
     for(int i = 0; i < arraySize; i++) {
     }
     return data;
+}
+
+
+///////////////////////////////////////////////
+
+void Link11MsgUtil::saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum) {
+    std::ofstream fout;
+    fout.open(FILE_NAME, std::ofstream::out);
+    if (fout.is_open() == false) {
+        std::cout << "ERROR:: open the file " << FILE_NAME << "failed!!   " << std::endl;
+        return;
+    }
+    std::cout << "FILE:: begin save data to " << FILE_NAME << std::endl;
+    std::string msg = CharArrayToBitStr(data, dataNum);
+    fout << msg;
+    fout.close();
+    std::cout << "FILE:: save finish " << std::endl << std::endl;
+}
+
+void Link11MsgUtil::getDataFromFile(const std::string& FILENAME, std::string& data) {
+    std::ifstream fin;
+    fin.open(FILENAME, std::ios::in);
+    if (fin.is_open() == false) {
+        std::cout << "Error:: open file " << FILENAME << "failed!!! " << std::endl;
+        return;
+    }
+    //每次读一行
+    std::cout << "The data readed from txt are: " << std::endl;
+    while (fin >> data) {
+        std::cout << data << std::endl;
+    }
+    std::cout << "total:" << data.length() << std::endl << std::endl;
+    fin.close();
 }

@@ -13,7 +13,7 @@ using namespace std;
 class Decode
 {
 public:
-	string CrackMessage(uint8_t* msg, int &n);
+	string CrackMessage(string temp, int &n);
 
 private:
 	string CrackDataFrame(const std::string& msg, int& n);

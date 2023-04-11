@@ -1,9 +1,8 @@
 #include "Decode.h"
 
-string Decode::CrackMessage(uint8_t* msg, int& n)
+string Decode::CrackMessage(string tmp, int& n)
 {
-	//转化为string
-	string tmp = (char*)msg;
+	
 	//cout << tmp << endl;
 
 	//解码前导帧

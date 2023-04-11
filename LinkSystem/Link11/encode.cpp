@@ -4,7 +4,7 @@
 
 using namespace std;
 
-uint8_t* Encode::BuildMessage(int type, int n, string& msg)
+uint8_t* Encode::BuildMessage(int type, int n, const string& msg)
 {
 
 	//构建前导帧
@@ -19,11 +19,11 @@ uint8_t* Encode::BuildMessage(int type, int n, string& msg)
 	string endframe = BuildEndFrame();
 
 	//组合
-	msg = preambleframe + phaseframe + startframe + dataframe + endframe;
+	string result = preambleframe + phaseframe + startframe + dataframe + endframe;
 	//cout << msg << endl;
 	//cout << (uint8_t*)msg.c_str() << endl;
-
-	return (uint8_t*)msg.c_str();
+	
+	return (uint8_t*)result.c_str();
 }
 
 //构建数据帧

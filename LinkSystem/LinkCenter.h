@@ -16,6 +16,8 @@ public:
 	void create_Link16(const std::string& msg, int n, int m);
 	void create_Link22(const std::string& msg, int n, int m = 0, int p = 0);
 private:
+	std::string getData();
+
 	Link11Center link11Center;
 	Link16Center link16Center;
 	Link22Center link22Center;

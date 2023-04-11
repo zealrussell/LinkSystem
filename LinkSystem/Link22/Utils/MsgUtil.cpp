@@ -5,8 +5,10 @@
 #include "MsgUtil.h"
 #include <fstream>
 #include <string>
+#include <map>
 
 const std::string MsgUtil::FILE_NAME = "./data.txt";
+extern std::map<std::string, std::pair<int, std::string> > NMPtoInfo;
 
 //输入字符串str_data长度必须为8的整数倍
 //功能：将二进制字符串“0000000100000010”按8bit一组合并转化{ "1", "2" }的字符数组

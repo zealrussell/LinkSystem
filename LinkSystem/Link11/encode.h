@@ -17,7 +17,7 @@ class Encode
 public:
 	Encode();
 	~Encode();
-	uint8_t* BuildMessage(int type, int n, string& msg);
+	uint8_t* BuildMessage(int type, int n, const string& msg);
 
 
 private:

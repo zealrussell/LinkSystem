@@ -1,14 +1,20 @@
+
 #pragma once
-#include "Link11ConstructCenter.h"
+
+#include "Link11MsgUtil.h"
+#include "encode.h"
+#include "Decode.h"
 
 class Link11Center
 {
 	public:
-		void encoder_Link11(int type, int n, string& msg);
-		void decoder_Link11(uint8_t* msg, int& n);
+		void encoder_Link11(int type, int n, const std::string& msg);
+		void decoder_Link11(int& n);
 
 	private:
-		Link11ConstructCenter constructCenter;
-		MsgUtil msgUtil;
+		Encode encode;
+		Decode decode;
+
+		Link11MsgUtil msgUtil;
 };
 

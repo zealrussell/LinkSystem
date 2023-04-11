@@ -1,11 +1,17 @@
 #include "Link11Center.h"
 
-void Link11Center::encoder_Link11(int type, int n, string& msg)
+void Link11Center::encoder_Link11(int type, int n, const std::string& msg)
 {
-	constructCenter.constructMessage(type, n, msg);
+	uint8_t* res = encode.BuildMessage(type, n, msg);
+	msgUtil.saveToFile(Link11MsgUtil::FILE_NAME, res, 10);
+	cout << res << endl;
 }
 
-void Link11Center::decoder_Link11(uint8_t* msg, int& n)
+void Link11Center::decoder_Link11(int& n)
 {
-	constructCenter.crackMessage(msg, n);
+	std::string dataStr;
+	msgUtil.getDataFromFile(Link11MsgUtil::FILE_NAME, dataStr);
+	string recvmsg = decode.CrackMessage(msg, n);
+	printf("接收到编号M.%d的报文，解码后消息为：", n);
+	cout << recvmsg << endl;
 }

@@ -337,9 +337,9 @@ void ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
         uint8_t tmp[36];
         memcpy(tmp, data + i, 36 * sizeof(uint8_t));
         // 2. 解码成 18，即两个 72bit 数据
-        uint8_t *msg = beginDisassemble(tmp);
-        std::string str = msgUtil.CharArrayToBitStr(msg, 18);
-        delete msg;
+        uint8_t *symbol = beginDisassemble(tmp);
+        std::string str = msgUtil.CharArrayToBitStr(symbol, 18);
+        delete symbol;
         // 3. 从link22消息中提取信息
         if (str.length() == 144) {
             message += msgUtil.getDataFromMessage(str.substr(0, 72));
