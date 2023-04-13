@@ -69,6 +69,10 @@ void LinkCenter::From16to22() {
 
 void LinkCenter::From11to16()
 {
+	string msg_11;
+	int n_11;
+
+	link11Center.decoder_Link11(msg_11, n_11);
 
 }
 
@@ -77,13 +81,15 @@ void LinkCenter::From16to11()
 	string msg_16, msg_22;
 	int n_16, m_16;
 	link16Center.decoder_Link16(msg_16, n_16, m_16);
-	
+	if (n_16 == 1 && m_16 == 1) {
+
+	}
 
 }
 
 void LinkCenter::create_Link11()
 {
-	// link11Center.encoder_Link11();
+	// link11Center.en coder_Link11();
 }
 
 

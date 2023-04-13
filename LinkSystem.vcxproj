@@ -106,8 +106,8 @@
     <ClCompile Include="LinkSystem\Link11\Decode.cpp" />
     <ClCompile Include="LinkSystem\Link11\encode.cpp" />
     <ClCompile Include="LinkSystem\Link11\hamming.cpp" />
-    <ClCompile Include="LinkSystem\Link11\Link11ConstructCenter.cpp" />
     <ClCompile Include="LinkSystem\Link11\Link11MsgUtil.cpp" />
+    <ClCompile Include="LinkSystem\Link11\Link11Center.cpp" />
     <ClCompile Include="linksystem\link16\AES.cpp" />
     <ClCompile Include="linksystem\link16\ContinueWord.cpp" />
     <ClCompile Include="linksystem\link16\decodeTools.cpp" />
@@ -137,8 +137,8 @@
     <ClInclude Include="LinkSystem\Link11\Decode.h" />
     <ClInclude Include="LinkSystem\Link11\encode.h" />
     <ClInclude Include="LinkSystem\Link11\hamming.h" />
-    <ClInclude Include="LinkSystem\Link11\Link11ConstructCenter.h" />
     <ClInclude Include="LinkSystem\Link11\Link11MsgUtil.h" />
+    <ClCompile Include="LinkSystem\Link11\Link11Center.h" />
     <ClInclude Include="linksystem\link16\AES.h" />
     <ClInclude Include="linksystem\link16\ContinueWord.h" />
     <ClInclude Include="linksystem\link16\CRC.h" />
@@ -175,6 +175,7 @@
     <ClInclude Include="linksystem\link22\utils\AESUtil.h" />
     <ClInclude Include="linksystem\link22\utils\CrcUtil.h" />
     <ClInclude Include="linksystem\link22\utils\MsgUtil.h" />
+	<ClInclude Include="linksystem\link22\utils\Link22Variable.h" />
     <ClInclude Include="linksystem\link22\utils\rsinclude\gf.hpp" />
     <ClInclude Include="linksystem\link22\utils\rsinclude\poly.hpp" />
     <ClInclude Include="linksystem\link22\utils\rsinclude\rs.hpp" />

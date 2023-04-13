@@ -9,7 +9,7 @@ class Link11Center
 {
 	public:
 		void encoder_Link11(int type, int n, const std::string& msg);
-		void decoder_Link11(int& n);
+		void decoder_Link11(std::string &msg, int& n);
 
 	private:
 		Encode encode;

@@ -92,13 +92,14 @@ std::bitset<72> *Link11MsgUtil::CharArrayToBitset(const uint8_t *charArray, int 
 }
 
 
-///////////////////////////////////////////////
+
+// *****************************************************************************
 
 void Link11MsgUtil::saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum) {
     std::ofstream fout;
     fout.open(FILE_NAME, std::ofstream::out);
     if (fout.is_open() == false) {
-        std::cout << "ERROR:: open the file " << FILE_NAME << "failed!!   " << std::endl;
+        std::cout << "ERROR:: open the file " << FILE_NAME << "failed!!   "<< std::endl;
         return;
     }
     std::cout << "FILE:: begin save data to " << FILE_NAME << std::endl;

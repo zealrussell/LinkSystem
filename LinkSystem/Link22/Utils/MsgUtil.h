@@ -6,6 +6,7 @@
 
 #ifndef LINK22_MSGUTIL_H
 #define LINK22_MSGUTIL_H
+
 #include <iostream>
 #include <bitset>
 #include <string>
@@ -35,6 +36,8 @@ public:
     void getDataFromFile(const std::string &FILENAME, std::string &data);
     void deleteFile(const std::string &FILE_NAME);
     static const std::string FILE_NAME;
+
+
 };
 
 template<size_t N> std::string MsgUtil::BitsetToStr(const std::bitset<N> &b) {

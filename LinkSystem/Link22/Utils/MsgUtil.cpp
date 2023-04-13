@@ -8,7 +8,8 @@
 #include <map>
 
 const std::string MsgUtil::FILE_NAME = "./data.txt";
-extern std::map<std::string, std::pair<int, std::string> > NMPtoInfo;
+extern std::map<std::string, int> CodetoType;
+extern std::map<std::string, std::string> CodetoName;
 
 //输入字符串str_data长度必须为8的整数倍
 //功能：将二进制字符串“0000000100000010”按8bit一组合并转化{ "1", "2" }的字符数组
@@ -164,20 +165,15 @@ void MsgUtil::getTypeFromMessage(const std::string &message, int &n_out, int &m_
 int MsgUtil::getTypeByNPM(int n, int p, int m)
 {
     std::string key = n + "_" + m + '_' + p;
-    if (m == -1 && p == -1) {
-        return 3;
-    }
-    else if (m == -1) {
-        return 2;
-    }
-    return 1;
+    return CodetoType[key];
 }
 
+// 从link22比特报文中获取n m p的十进制值
 int MsgUtil::getNumFromLinkMsg(std::string msg) {
     std::reverse(msg.begin(), msg.end());
     return std::stoi(msg, NULL, 2);
 }
-///////////////////////////////////////////////
+// 文件操作******************************************* 
  
 void MsgUtil::saveToFile(const std::string &FILE_NAME, const uint8_t *data, int dataNum) {
     std::ofstream fout;

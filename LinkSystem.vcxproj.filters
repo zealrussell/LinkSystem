@@ -99,7 +99,13 @@
     <ClCompile Include="LinkSystem\Link11\Link11MsgUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LinkSystem\Link11\Link11ConstructCenter.cpp">
+    <ClCompile Include="LinkSystem\Link11\Link11Center.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\Link11Center.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Link22Variable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -236,7 +242,7 @@
     <ClInclude Include="LinkSystem\Link11\Link11MsgUtil.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LinkSystem\Link11\Link11ConstructCenter.h">
+    <ClInclude Include="Link22Variable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

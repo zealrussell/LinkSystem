@@ -21,6 +21,7 @@ public:
     std::bitset<72> *CharArrayToBitset(const uint8_t *charArray, int arraySize);
 
     // 将内容保存至文件中
+
     void saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum);
     void getDataFromFile(const std::string& FILENAME, std::string& data);
     void deleteFile(const std::string& FILE_NAME);

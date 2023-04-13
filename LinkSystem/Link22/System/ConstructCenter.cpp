@@ -344,8 +344,10 @@ void ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
         if (str.length() == 144) {
             message += msgUtil.getDataFromMessage(str.substr(0, 72));
             message += msgUtil.getDataFromMessage(str.substr(72,72));
+            //4. 提取 Link22 报文类型
+
             if (flag) {
-                msgUtil.getTypeFromMessage(str.substr(0, 72),n,m,p);
+                msgUtil.getTypeFromMessage(str.substr(0, 72),n, m, p);
                 flag != flag;
             }
         }
