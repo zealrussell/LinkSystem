@@ -2,10 +2,10 @@
 
 void Link16Center::encoder_Link16(const string& inputs, int n, int m)
 {
-	encoder(n, m, inputs);
+	interface::encoder_Link16(n, m, inputs);
 }
 
 void Link16Center::decoder_Link16(string& msg, int& n, int& m)
 {
-	decoder(msg, n, m);
+	interface::decoder_Link16(msg, n, m);
 }

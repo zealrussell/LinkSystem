@@ -1,7 +1,6 @@
 #include "tools.h"
 #include "global.h"
 
-#include "decodeTools.h"
 #include "STDPMsg.h"
 #include "interface.h"
 

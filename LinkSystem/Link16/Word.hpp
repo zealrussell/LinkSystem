@@ -1,6 +1,7 @@
 #pragma once
 #include "dataType.h"
 #include <iostream>
+#include <string.h>
 
 template <RS_Length codeLength, RS_Length dataLength>
 class Word {
@@ -50,11 +51,11 @@ public:
 		memset(symbol_RS_word, 0, sizeof(symbol) * codeLength);
 		memcpy(symbol_RS_word, symbol_word, sizeof(symbol) * dataLength);
 
-		if (!Link16_RS(codeLength, dataLength, message, symbol_RS_word)) {
-			std::cout << "RS±àÂë³É¹¦" << std::endl;
+		if (!RS(codeLength, dataLength, message, symbol_RS_word)) {
+			std::cout << "RS encoding successful" << std::endl;
 		}
 		else {
-			std::cout << "RS±àÂëÊ§°Ü" << std::endl;
+			std::cout << "RS encoding failed" << std::endl;
 		}
 
 		////print

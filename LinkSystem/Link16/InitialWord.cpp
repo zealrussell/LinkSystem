@@ -75,7 +75,7 @@ void InitialWord::handler_word(string& bit_data, string& type) {
 }
 
 void InitialWord::show() {
-	std::cout << "======" << "初始字已填充完成" << "======" << std::endl;
+	std::cout << "======" << "InitialWord has been filled in" << "======" << std::endl;
 	std::cout << "initial_word:" << std::endl;
 	std::cout << "\tformat\t\t=\t" << m_format << std::endl;
 	std::cout << "\tsignal\t\t=\t" << m_signal << std::endl;

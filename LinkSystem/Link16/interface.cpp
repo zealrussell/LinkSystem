@@ -1,140 +1,144 @@
 #include "interface.h"
 
-//m,nÊÇ·¢ËÍµÄÕ½ÊõÏûÏ¢ÀàÐÍ,inputsÊÇÏûÏ¢Ö÷ÒªÄÚÈÝ
-int32_t encoder(int32_t n, int32_t m, const string& inputs) {
-	//Êý¾Ý×¼±¸
-	string type = to_string(n) + " " + to_string(m);
-	if (g_JType.count(type) == 0) {
-		std::cout << "·¢ËÍµÄÏûÏ¢ÀàÐÍ²»´æÔÚ" << std::endl;
-		return -1;
-	}
-	std::cout << "·¢ËÍµÄÏûÏ¢ÀàÐÍÎª£º" << g_JType[type] << std::endl;
-
-	srand((unsigned)time(NULL));
-	string bit_data = Tools::StrToBitStr(inputs);
-	std::cout << "raw_data = " << inputs << std::endl;
-	std::cout << "bit_data = " << bit_data << std::endl;
-
-	//ÅÐ¶ÏÎÄ¼þÊÇ·ñ´æÔÚ£¬Èô´æÔÚÔòÉ¾³ý
-	if (!Tools::deleteFile()) {
-		return -2;
-	}
-
-	bitset<15> STN = bitset<15>(Tools::generateBIN(15));
-	HeaderWord headerWord = HeaderWord(STN);
-	headerWord.show();
-
-	size_t bit_length = bit_data.length();
-	//·â×°ºÍ·¢ËÍ¹ý³Ì£ºÊ¹ÓÃ±ê×¼¸ñÊ½(STD)½øÐÐ·â×°---°´ÕÕ³õÊ¼×Ö->À©Õ¹×Ö->¼ÌÐø×ÖµÄË³ÐòÅÅÁÐ
-	int flag = 3;
-	InitialWord iword;
-	ExtendWord eword;
-	ContinueWord cword;
-	while (1) {
-		bit_length = bit_data.length();
-		if (bit_length <= 0) {
-			//Ö´ÐÐ210bitÆæÅ¼Ð£Ñé¼°ºóÐø²½Öè£¬²¢ÍË³ö
-			Tools::handlerSTDP(headerWord, iword, eword, cword);
-			iword.clear();
-			eword.clear();
-			cword.clear();
-			break;
-		}
-		if (flag == 0 && bit_length > 0) {
-			//Ö´ÐÐ210bitÆæÅ¼Ð£Ñé¼°ºóÐø²½Öè£¬²¢½øÐÐÐÂÒ»ÂÖµÄ´ò°ü
-			Tools::handlerSTDP(headerWord, iword, eword, cword);
-			iword.clear();
-			eword.clear();
-			cword.clear();
-			flag = 3;
-		}
-		switch (flag)
-		{
-		case 3:
-		{
-			iword.clear();
-			iword.handler_word(bit_data, type);
-			iword.show();
-			break;
-		}
-		case 2:
-		{
-			eword.clear();
-			eword.handler_word(bit_data);
-			eword.show();
-			break;
-		}
-		case 1:
-		{
-			cword.clear();
-			cword.handler_word(bit_data);
-			cword.show();
-			break;
-		}
-		default:
-			break;
-		}
-		flag--;
-	}
-}
-
-int32_t decoder(string& raw_data, int32_t& n, int32_t& m) {
-	//´ÓÎÄ¼þÖÐ¶ÁÈëÊý¾Ý
-	string RT_bit_data = Tools::read_msg();
-	string bit_msg;
-
-	//TODO:ÓÃSTDPMsgÀà·â×°½â°üºóµÄÊý¾Ý
-	STDPMsg stdp_msg;
-
-	while (RT_bit_data.length() != 0) {
-		//½ØÈ¡Ò»×éÏûÏ¢
-		std::cout << "µ±Ç°ÏûÏ¢³¤¶ÈÎª£º" << RT_bit_data.length() << std::endl;
-		string str_group = Tools::getGroup(RT_bit_data);
-		stdp_msg.setRawMsg(str_group);
-
-		//½â½»Ö¯
-		string str_weave = Tools::decode_weave(str_group);
-
-		//½âRS±àÂë¡¢AES½âÃÜ¡¢BIPÐ£Ñé
-		string bit_data = Tools::decode_RS_AES_BIP_handler(str_weave);
-		if (bit_data.empty()) {
-			std::cout << "[decode_RS_AES_BIP_handler]º¯ÊýÄÚ²¿³ö´í" << std::endl;
+namespace interface{
+	//m,nï¿½Ç·ï¿½ï¿½Íµï¿½Õ½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½,inputsï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½
+	int32_t encoder_Link16(int32_t n, int32_t m, const string& inputs) {
+		//ï¿½ï¿½ï¿½ï¿½×¼ï¿½ï¿½
+		string type = to_string(n) + " " + to_string(m);
+		if (g_JType.count(type) == 0) {
+			std::cout << "The message type sent does not exist" << std::endl;
 			return -1;
 		}
+		std::cout << "The message type sent is:" << g_JType[type] << std::endl;
 
-		//·â×°HeaderWord
-		string headerword_str = bit_data.substr(0, 35);
-		stdp_msg.setHeaderWord(headerword_str);
-		//È¥HeaderWord
-		bit_data.erase(0, 35);
+		srand((unsigned)time(NULL));
+		string bit_data = Tools::StrToBitStr(inputs);
+		std::cout << "raw_data = " << inputs << std::endl;
+		std::cout << "bit_data = " << bit_data << std::endl;
 
-		//·â×°InitialWord
-		string iword_str = bit_data.substr(0, 75);
-		stdp_msg.setInitialWord(iword_str);
-		//´ÓInitialWordÈ¡n, m
-		bitset<5> signal = stdp_msg.getInitialWord()->getSignal();
-		bitset<3> subSignal = stdp_msg.getInitialWord()->getSubSignal();
-		n = static_cast<int32_t>(signal.to_ulong());
-		m = static_cast<int32_t>(subSignal.to_ulong());
-		//´ÓInitialWordÖÐÈ¡data
-		bit_msg += stdp_msg.getInitialWord()->getData();
-		//È¥InitialWord
-		bit_data.erase(0, 75);
+		//ï¿½Ð¶ï¿½ï¿½Ä¼ï¿½ï¿½Ç·ï¿½ï¿½ï¿½Ú£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½
+		if (!Tools::deleteFile()) {
+			return -2;
+		}
 
-		//·â×°ExtendWord
-		string eword_str = bit_data.substr(0, 75);
-		stdp_msg.setExtendWord(eword_str);
-		//´ÓExtendWordÖÐÈ¡data
-		bit_msg += stdp_msg.getExtendWord()->getData();
-		//È¥ExtendWord
-		bit_data.erase(0, 75);
+		bitset<15> STN = bitset<15>(Tools::generateBIN(15));
+		HeaderWord headerWord = HeaderWord(STN);
+		headerWord.show();
 
-		//·â×°ContinueWord
-		string cword_str = bit_data.substr(0, 75);
-		stdp_msg.setContinueWord(cword_str);
-		//´ÓContinueWordÖÐÈ¡data
-		bit_msg += stdp_msg.getContinueWord()->getData();
+		size_t bit_length = bit_data.length();
+		//ï¿½ï¿½×°ï¿½Í·ï¿½ï¿½Í¹ï¿½ï¿½Ì£ï¿½Ê¹ï¿½Ã±ï¿½×¼ï¿½ï¿½Ê½(STD)ï¿½ï¿½ï¿½Ð·ï¿½×°---ï¿½ï¿½ï¿½Õ³ï¿½Ê¼ï¿½ï¿½->ï¿½ï¿½Õ¹ï¿½ï¿½->ï¿½ï¿½ï¿½ï¿½ï¿½Öµï¿½Ë³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		int flag = 3;
+		InitialWord iword;
+		ExtendWord eword;
+		ContinueWord cword;
+		while (1) {
+			bit_length = bit_data.length();
+			if (bit_length <= 0) {
+				//Ö´ï¿½ï¿½210bitï¿½ï¿½Å¼Ð£ï¿½é¼°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è£¬ï¿½ï¿½ï¿½Ë³ï¿½
+				Tools::handlerSTDP(headerWord, iword, eword, cword);
+				iword.clear();
+				eword.clear();
+				cword.clear();
+				break;
+			}
+			if (flag == 0 && bit_length > 0) {
+				//Ö´ï¿½ï¿½210bitï¿½ï¿½Å¼Ð£ï¿½é¼°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½è£¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ÖµÄ´ï¿½ï¿½
+				Tools::handlerSTDP(headerWord, iword, eword, cword);
+				iword.clear();
+				eword.clear();
+				cword.clear();
+				flag = 3;
+			}
+			switch (flag)
+			{
+			case 3:
+			{
+				iword.clear();
+				iword.handler_word(bit_data, type);
+				iword.show();
+				break;
+			}
+			case 2:
+			{
+				eword.clear();
+				eword.handler_word(bit_data);
+				eword.show();
+				break;
+			}
+			case 1:
+			{
+				cword.clear();
+				cword.handler_word(bit_data);
+				cword.show();
+				break;
+			}
+			default:
+				break;
+			}
+			flag--;
+		}
+		return 0;
 	}
-	stdp_msg.setBitMsg(bit_msg);
-	raw_data = Tools::BitStrTostr(bit_msg);
+
+	int32_t decoder_Link16(string& raw_data, int32_t& n, int32_t& m) {
+		//ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		string RT_bit_data = Tools::read_msg();
+		string bit_msg;
+
+		//TODO:ï¿½ï¿½STDPMsgï¿½ï¿½ï¿½×°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+		STDPMsg stdp_msg;
+
+		while (RT_bit_data.length() != 0) {
+			//ï¿½ï¿½È¡Ò»ï¿½ï¿½ï¿½ï¿½Ï¢
+			std::cout << "The current message length is:" << RT_bit_data.length() << std::endl;
+			string str_group = Tools::getGroup(RT_bit_data);
+			stdp_msg.setRawMsg(str_group);
+
+			//ï¿½â½»Ö¯
+			string str_weave = Tools::decode_weave(str_group);
+
+			//ï¿½ï¿½RSï¿½ï¿½ï¿½ë¡¢AESï¿½ï¿½ï¿½Ü¡ï¿½BIPÐ£ï¿½ï¿½
+			string bit_data = Tools::decode_RS_AES_BIP_handler(str_weave);
+			if (bit_data.empty()) {
+				std::cout << "[decode_RS_AES_BIP_handler] Internal function error" << std::endl;
+				return -1;
+			}
+
+			//ï¿½ï¿½×°HeaderWord
+			string headerword_str = bit_data.substr(0, 35);
+			stdp_msg.setHeaderWord(headerword_str);
+			//È¥HeaderWord
+			bit_data.erase(0, 35);
+
+			//ï¿½ï¿½×°InitialWord
+			string iword_str = bit_data.substr(0, 75);
+			stdp_msg.setInitialWord(iword_str);
+			//ï¿½ï¿½InitialWordÈ¡n, m
+			bitset<5> signal = stdp_msg.getInitialWord()->getSignal();
+			bitset<3> subSignal = stdp_msg.getInitialWord()->getSubSignal();
+			n = static_cast<int32_t>(signal.to_ulong());
+			m = static_cast<int32_t>(subSignal.to_ulong());
+			//ï¿½ï¿½InitialWordï¿½ï¿½È¡data
+			bit_msg += stdp_msg.getInitialWord()->getData();
+			//È¥InitialWord
+			bit_data.erase(0, 75);
+
+			//ï¿½ï¿½×°ExtendWord
+			string eword_str = bit_data.substr(0, 75);
+			stdp_msg.setExtendWord(eword_str);
+			//ï¿½ï¿½ExtendWordï¿½ï¿½È¡data
+			bit_msg += stdp_msg.getExtendWord()->getData();
+			//È¥ExtendWord
+			bit_data.erase(0, 75);
+
+			//ï¿½ï¿½×°ContinueWord
+			string cword_str = bit_data.substr(0, 75);
+			stdp_msg.setContinueWord(cword_str);
+			//ï¿½ï¿½ContinueWordï¿½ï¿½È¡data
+			bit_msg += stdp_msg.getContinueWord()->getData();
+		}
+		stdp_msg.setBitMsg(bit_msg);
+		raw_data = bit_msg;
+		return 0;
+	}
 }

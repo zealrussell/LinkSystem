@@ -33,8 +33,8 @@ void HeaderWord::to_symbol() {
 }
 
 void HeaderWord::show() {
-	std::cout << "======" << "消息头已生成" << "======" << std::endl;
-	std::cout << "JHeader:" << std::endl;
+	std::cout << "======" << "Message header generated" << "======" << std::endl;
+	std::cout << "HeaderWord:" << std::endl;
 	std::cout << "\ttype\t\t=\t" << m_type << std::endl;
 	std::cout << "\tPR\t\t=\t" << m_PR << std::endl;
 	std::cout << "\tSTN\t\t=\t" << m_STN << std::endl;
