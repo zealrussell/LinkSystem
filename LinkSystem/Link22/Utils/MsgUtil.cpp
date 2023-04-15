@@ -165,8 +165,13 @@ void MsgUtil::getTypeFromMessage(const std::string &message, int &n_out, int &m_
 
 int MsgUtil::getTypeByNPM(int n, int p, int m)
 {
-    std::string key = n + "_" + m + '_' + p;
-    return CodetoType[key];
+    if (p == -1 && m == -1) {
+        return 3;
+    } else if (m == -1) {
+        return 2;
+    } else return 1;
+    //std::string key = n + "_" + m + '_' + p;
+    //return CodetoType[key];
 }
 
 // 从link22比特报文中获取n m p的十进制值

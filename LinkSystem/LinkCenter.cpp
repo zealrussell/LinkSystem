@@ -42,6 +42,7 @@ void LinkCenter::From16to22() {
 	string msg_16, msg_22;
 	int n_16, m_16;
 	link16Center.decoder_Link16(msg_16, n_16, m_16);
+	std::cout << "-------------link16 decode finish ------------" << std::endl;
 	int n_22 = 0, m_22 = 0, p_22 = 0;
 	// Ö±Òë
 	if (n_16 == 31 && m_16 == 11) {
@@ -63,7 +64,7 @@ void LinkCenter::From16to22() {
 		p_22 = -1;
 		msg_22 = msg_16 + ";speed=0";
 	}
-	printf("\n\n\n\n\n\n\n\n");
+	// printf("\n\n\n\n\n\n\n\n");
 	link22Center.encoder_Link22(msg_22, n_22, m_22, p_22);
 }
 
@@ -100,5 +101,5 @@ void LinkCenter::create_Link16(const std::string& msg, int n, int m)
 
 void LinkCenter::create_Link22(const std::string& msg, int n, int m, int p)
 {
-	link22Center.encoder_Link22(msg, n, m, 0);
+	link22Center.encoder_Link22(msg, n, m, p);
 }

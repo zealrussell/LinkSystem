@@ -3,5 +3,6 @@
 #include <map>
 #include <string>
 
-extern std::map<std::string, int> CodetoType;
+
+// Link22 typename
 extern std::map<std::string, std::string> CodetoName;

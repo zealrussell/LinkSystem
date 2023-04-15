@@ -7,8 +7,8 @@
 int main()
 {
     LinkCenter center;
-    gcenter.create_Link16("lat:130,log:90,alt:3000;", 3, 2);
-    // center.create_Link22("");
-    //center.From16to22();
+    center.create_Link16("lat:130,log:90,alt:3000;", 3, 2);
+    // center.create_Link22("hello zeal", 4, 1, -1);
+    center.From16to22();
     std::cin.get();
 }
