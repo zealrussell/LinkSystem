@@ -1,12 +1,12 @@
-cmake_minimum_required(VERSION 3.23)
-project(Link22Ssystem)
+cmake_minimum_required(VERSION 3.5)
+project(Link22System)
 
 set(CMAKE_CXX_STANDARD 11)
 
 # set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 add_library(${PROJECT_NAME} 
-Utils/Link22Variable.h
+Utils/Link22Variable.cpp Utils/Link22Variable.h
 Utils/MsgUtil.cpp Utils/MsgUtil.h 
 Utils/CrcUtil.cpp Utils/CrcUtil.h 
 Utils/RSInclude/gf.hpp Utils/RSInclude/rs.hpp  Utils/RSInclude/poly.hpp 
@@ -16,4 +16,5 @@ System/ConstructCenter.cpp System/ConstructCenter.h
 System/F0nMessage.cpp System/F0nMessage.h 
 System/FnpMessage.cpp System/FnpMessage.h 
 System/FnMessage.cpp System/FnMessage.h
+Link22Center.cpp Link22Center.h
 )

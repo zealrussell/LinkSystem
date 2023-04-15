@@ -5,7 +5,7 @@ using namespace std;
 
 typedef bitset<5>	symbol;		//5bit = 1Symbol, ע��sizeof(symbol) = 4
 
-constexpr auto FILENAME = R"(~/C++Space/Link16/data.txt)";
+constexpr auto FILENAME = R"(./data.txt)";
 
 const unsigned int BLOCK_BYTES_LENGTH = 16 * sizeof(unsigned char);
 

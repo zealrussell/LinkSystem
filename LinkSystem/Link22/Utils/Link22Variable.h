@@ -3,15 +3,5 @@
 #include <map>
 #include <string>
 
-extern std::map<std::string, int> CodetoType = { 
-	{"1_3_3", 1}
-
-};
-
-extern std::map<std::string, std::string> CodetoName = {
-	{"1_5_0", "声定向/声测距放大"}, {"1_5_1", "声定向/声测距传感器"}, {"1_5_2", "声定向/声测距频率"}, {"1_6_0", "基本命令"}, {"1_6_1", "命令拓展"},
-	{"1_6_2", "空中协同"}, {"2_0_0", "间接PLI放大"}, {"2_1_0", "PLI敌我识别"}, {"2_2_0", "空中PLI航向和速度"}, {"2_2_1", "空中PLI附加任务相关器"},
-	{"2_3_0", "海上PLI航向和速度"}, {"2_3_1", "海上PLI任务相关器"}, {"2_4_0", "水下 PLI航向和速度"}, {"2_4_1", "水下PLI任务相关器"}, {"1_0_0", ""},
-	{"2_5_0", "地面上点的PLI连续"}, {"2_5_1", "地面上点的PLI附加任务相关器"}, {"2_6_1", "地面轨迹 PLI任务相关器"}, {"2_7_0", "ANFT TBD"}, {"1_0_0", ""},
-
-};
+extern std::map<std::string, int> CodetoType;
+extern std::map<std::string, std::string> CodetoName;

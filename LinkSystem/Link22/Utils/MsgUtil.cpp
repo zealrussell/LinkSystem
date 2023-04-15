@@ -6,6 +6,7 @@
 #include <fstream>
 #include <string>
 #include <map>
+#include <algorithm>
 
 const std::string MsgUtil::FILE_NAME = "./data.txt";
 extern std::map<std::string, int> CodetoType;
@@ -170,14 +171,13 @@ int MsgUtil::getTypeByNPM(int n, int p, int m)
 
 // 从link22比特报文中获取n m p的十进制值
 int MsgUtil::getNumFromLinkMsg(std::string msg) {
-    std::reverse(msg.begin(), msg.end());
+    reverse(msg.begin(), msg.end());
     return std::stoi(msg, NULL, 2);
 }
 // 文件操作******************************************* 
  
 void MsgUtil::saveToFile(const std::string &FILE_NAME, const uint8_t *data, int dataNum) {
-    std::ofstream fout;
-    fout.open(FILE_NAME, std::ofstream::out);
+    std::ofstream fout(FILE_NAME, std::ios_base::out);
     if (fout.is_open() == false) {
         std::cout << "ERROR:: open the file " << FILE_NAME << "failed!!   " << std::endl;
         return;
@@ -190,8 +190,7 @@ void MsgUtil::saveToFile(const std::string &FILE_NAME, const uint8_t *data, int 
 }
 
 void MsgUtil::getDataFromFile(const std::string &FILENAME, std::string &data) {
-    std::ifstream fin;
-    fin.open(FILENAME, std::ios::in);
+    std::ifstream fin(FILENAME, std::ios_base::in);
     if (fin.is_open() == false) {
         std::cout << "Error:: open file " << FILENAME << "failed!!! " << std::endl;
         return;
