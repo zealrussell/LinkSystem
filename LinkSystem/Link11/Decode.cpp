@@ -5,38 +5,38 @@ string Decode::CrackMessage(string tmp, int& n)
 	
 	//cout << tmp << endl;
 
-	//½âÂëÇ°µ¼Ö¡
+	//è§£ç å‰å¯¼å¸§
 	string preambleframe = CrackPreambleFrame(tmp);
 	//cout << preambleframe << endl
 	//	<< preambleframe.length() << endl;
 
-	//½âÂëÏàÎ»²Î¿¼Ö¡
+	//è§£ç ç›¸ä½å‚è€ƒå¸§
 	string phaseframe = CrackPhaseFrame(tmp);
 	//cout << phaseframe << endl
 	//	<< phaseframe.length() << endl;
 	
-	//½âÂëÊý¾ÝÖ¡
+	//è§£ç æ•°æ®å¸§
 	string dataframe = CrackDataFrame(tmp,n);
 	//cout << dataframe << endl
 	//	<< dataframe.length() << endl;
 
-	//½«01ÐòÁÐ×ªÎªÏûÏ¢
+	//å°†01åºåˆ—è½¬ä¸ºæ¶ˆæ¯
 	Link11MsgUtil msgutil;
 	string str = msgutil.BitStrToStr(dataframe);
 	return str;
 }
 
-//½âÂëÊý¾ÝÖ¡
+//è§£ç æ•°æ®å¸§
 string Decode::CrackDataFrame(const std::string& msg, int& n)
 {
-	//¼ÆËãÊý¾ÝÖ¡³¤¶È
+	//è®¡ç®—æ•°æ®å¸§é•¿åº¦
 	int len = msg.length() - 6 * FrameLen - 4 * 30;
 	
-	//·Ö¸î³öÊý¾ÝÖ¡
+	//åˆ†å‰²å‡ºæ•°æ®å¸§
 	string dataframe = msg.substr(6 * FrameLen + 2 * 30, len);
 	
-	//ÏûÏ¢°´Ö¡»®·Ö,Í¬Ê±Íê³ÉººÃ÷Âë½âÂëÈ»ºóºÏ²¢
-	int end = FrameLen;//·Ö¸î¶¨³¤´óÐ¡
+	//æ¶ˆæ¯æŒ‰å¸§åˆ’åˆ†,åŒæ—¶å®Œæˆæ±‰æ˜Žç è§£ç ç„¶åŽåˆå¹¶
+	int end = FrameLen;//åˆ†å‰²å®šé•¿å¤§å°
 
 	string tmp;
 
@@ -48,24 +48,24 @@ string Decode::CrackDataFrame(const std::string& msg, int& n)
 		end = end + FrameLen;
 		tmp += decode(s.c_str());
 	}
-	//Ç°4bitÎª±¨ÎÄ±àºÅ
+	//å‰4bitä¸ºæŠ¥æ–‡ç¼–å·
 	string datanum = tmp.substr(0, 4);
-	//Æäºó¾ùÎªÊý¾Ý
-	string data = tmp.substr(4, tmp.length()-8);//½ØÈ¡µÄ³¤¶ÈÓ¦ÎªcharÀàÐÍµÄÎ»³¤8µÄÕûÊý
+	//å…¶åŽå‡ä¸ºæ•°æ®
+	string data = tmp.substr(4, tmp.length()-8);//æˆªå–çš„é•¿åº¦åº”ä¸ºcharç±»åž‹çš„ä½é•¿8çš„æ•´æ•°
 
-	//ÉùÃ÷½ÓÊÕ±¨ÎÄµÄ±àºÅ
+	//å£°æ˜ŽæŽ¥æ”¶æŠ¥æ–‡çš„ç¼–å·
 	n = stoi(datanum, 0, 2);
 
 	return data;
 }
 
-//½âÂëÇ°µ¼Ö¡
+//è§£ç å‰å¯¼å¸§
 string Decode::CrackPreambleFrame(const std::string& msg)
 {
 	string preambleframe = msg.substr(0, 5 * FrameLen);
 
-	//ÏûÏ¢°´Ö¡»®·Ö,Í¬Ê±Íê³ÉººÃ÷Âë½âÂëÈ»ºóºÏ²¢
-	int end = FrameLen;//·Ö¸î¶¨³¤´óÐ¡
+	//æ¶ˆæ¯æŒ‰å¸§åˆ’åˆ†,åŒæ—¶å®Œæˆæ±‰æ˜Žç è§£ç ç„¶åŽåˆå¹¶
+	int end = FrameLen;//åˆ†å‰²å®šé•¿å¤§å°
 	int len = preambleframe.length();
 
 	string tmp;
@@ -82,13 +82,13 @@ string Decode::CrackPreambleFrame(const std::string& msg)
 	return tmp;
 }
 
-//½âÂëÏàÎ»²Î¿¼Ö¡
+//è§£ç ç›¸ä½å‚è€ƒå¸§
 string Decode::CrackPhaseFrame(const std::string& msg)
 {
 	string phaseframe = msg.substr(5 * FrameLen, 1 * FrameLen);
 
-	//ÏûÏ¢°´Ö¡»®·Ö,Í¬Ê±Íê³ÉººÃ÷Âë½âÂëÈ»ºóºÏ²¢
-	int end = FrameLen;//·Ö¸î¶¨³¤´óÐ¡
+	//æ¶ˆæ¯æŒ‰å¸§åˆ’åˆ†,åŒæ—¶å®Œæˆæ±‰æ˜Žç è§£ç ç„¶åŽåˆå¹¶
+	int end = FrameLen;//åˆ†å‰²å®šé•¿å¤§å°
 	int len = phaseframe.length();
 
 	string tmp;

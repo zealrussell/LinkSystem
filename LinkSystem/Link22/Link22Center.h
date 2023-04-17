@@ -4,9 +4,9 @@
 class Link22Center
 {
 public:
-	// ¼ÓÃÜÆ÷
+	// åŠ å¯†å™¨
 	void encoder_Link22(const std::string &msg, int n = 0, int m = 0, int p = 0);
-    // ½âÃÜÆ÷
+    // è§£å¯†å™¨
 	void decoder_Link22(std::string &msg, int &n, int &m, int &p);
 
 private:

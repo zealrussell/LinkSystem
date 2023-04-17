@@ -7,18 +7,18 @@ using namespace std;
 uint8_t* Encode::BuildMessage(int type, int n, const string& msg)
 {
 
-	//¹¹½¨Ç°µ¼Ö¡
+	//æ„å»ºå‰å¯¼å¸§
 	string preambleframe = BuildPreambleFrame();
-	//¹¹½¨ÏàÎ»²Î¿¼Ö¡
+	//æ„å»ºç›¸ä½å‚è€ƒå¸§
 	string phaseframe = BuildPhaseFrame();
-	//¹¹½¨ÆğÊ¼Ö¡
+	//æ„å»ºèµ·å§‹å¸§
 	string startframe = BuildStartFrame();
-	//¹¹½¨Êı¾İÖ¡
+	//æ„å»ºæ•°æ®å¸§
 	string dataframe = BuildDataFrame(type, n, msg);
-	//¹¹½¨½áÊøÖ¡
+	//æ„å»ºç»“æŸå¸§
 	string endframe = BuildEndFrame();
 
-	//×éºÏ
+	//ç»„åˆ
 	string result = preambleframe + phaseframe + startframe + dataframe + endframe;
 	//cout << msg << endl;
 	//cout << (uint8_t*)msg.c_str() << endl;
@@ -26,16 +26,16 @@ uint8_t* Encode::BuildMessage(int type, int n, const string& msg)
 	return (uint8_t*)result.c_str();
 }
 
-//¹¹½¨Êı¾İÖ¡
+//æ„å»ºæ•°æ®å¸§
 string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 {
 	string tmp;
 
-	//½«ÏûÏ¢×ªÎª01ĞòÁĞ
+	//å°†æ¶ˆæ¯è½¬ä¸º01åºåˆ—
 	Link11MsgUtil msgutil;
 	string bitstr = msgutil.StrToBitStr(msg);
 
-	//¹¹Ôì4Î»±¨ÎÄ±àºÅ
+	//æ„é€ 4ä½æŠ¥æ–‡ç¼–å·
 	string num = to_string(decToBin(n));
 	//cout << num << endl;
 	for (int i = 0; i < 4 - num.length(); i++) {
@@ -44,35 +44,35 @@ string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 	tmp += num;
 	//cout << tmp << endl;
 	
-	//ÏûÏ¢°´24bit»®·Ö£¬Ã¿Ö¡Ö»ÓĞ24bitÏûÏ¢,Í¬Ê±Íê³ÉººÃ÷Âë¼ÓÃÜÈ»ºóºÏ²¢
-	//µÚÒ»Ö¡Ç°4bitÒÑ±»±¨ÎÄ±àºÅÕ¼¾İ
+	//æ¶ˆæ¯æŒ‰24bitåˆ’åˆ†ï¼Œæ¯å¸§åªæœ‰24bitæ¶ˆæ¯,åŒæ—¶å®Œæˆæ±‰æ˜ç åŠ å¯†ç„¶ååˆå¹¶
+	//ç¬¬ä¸€å¸§å‰4bitå·²è¢«æŠ¥æ–‡ç¼–å·å æ®
 	int len = bitstr.length();
-	int end = 20;//³õÊ¼Ä©Î²
+	int end = 20;//åˆå§‹æœ«å°¾
 
-	//ÇĞ¸î20bitµÄÊı¾İºÍ±¨ÎÄ±àºÅµÄ4bit×é³ÉµÚÒ»Ö¡
+	//åˆ‡å‰²20bitçš„æ•°æ®å’ŒæŠ¥æ–‡ç¼–å·çš„4bitç»„æˆç¬¬ä¸€å¸§
 	string s;
-	if (20 > len)//Õë¶Ô×îºóÒ»¸ö·Ö¸î´®£¬²»×ã·Ö¸î³¤¶È£¬²¹0
+	if (20 > len)//é’ˆå¯¹æœ€åä¸€ä¸ªåˆ†å‰²ä¸²ï¼Œä¸è¶³åˆ†å‰²é•¿åº¦ï¼Œè¡¥0
 	{
-		s = bitstr.substr(0, len);//×îºóÒ»¸ö×Ö·û´®µÄÔ­Ê¼²¿·Ö
-		s.append(end - len, '0');//²»×ãnumÎ»µÄ£¬²¹0
+		s = bitstr.substr(0, len);//æœ€åä¸€ä¸ªå­—ç¬¦ä¸²çš„åŸå§‹éƒ¨åˆ†
+		s.append(end - len, '0');//ä¸è¶³numä½çš„ï¼Œè¡¥0
 		tmp = encode((tmp + s).c_str());
 	}
 	else {
-		s = bitstr.substr(0, end);//´Ó0¿ªÊ¼£¬·Ö¸î20Î»×Ö·û´®
+		s = bitstr.substr(0, end);//ä»0å¼€å§‹ï¼Œåˆ†å‰²20ä½å­—ç¬¦ä¸²
 		end = end + DataLen;
 		tmp = encode((tmp + s).c_str());
 
-		//°´24Ò»×éÇĞ¸îÖ®ºóÊı¾İ
+		//æŒ‰24ä¸€ç»„åˆ‡å‰²ä¹‹åæ•°æ®
 		for (int start = 20; start < len;)
 		{
-			if (end > len)//Õë¶Ô×îºóÒ»¸ö·Ö¸î´®£¬²»×ã·Ö¸î³¤¶È£¬²¹0
+			if (end > len)//é’ˆå¯¹æœ€åä¸€ä¸ªåˆ†å‰²ä¸²ï¼Œä¸è¶³åˆ†å‰²é•¿åº¦ï¼Œè¡¥0
 			{
-				s = bitstr.substr(start, len - start);//×îºóÒ»¸ö×Ö·û´®µÄÔ­Ê¼²¿·Ö
-				s.append(end - len, '0');//²»×ãnumÎ»µÄ£¬²¹0
+				s = bitstr.substr(start, len - start);//æœ€åä¸€ä¸ªå­—ç¬¦ä¸²çš„åŸå§‹éƒ¨åˆ†
+				s.append(end - len, '0');//ä¸è¶³numä½çš„ï¼Œè¡¥0
 				tmp += encode(s.c_str());
 				break;
 			}
-			s = bitstr.substr(start, DataLen);//´Ó0¿ªÊ¼£¬·Ö¸î24Î»×Ö·û´®
+			s = bitstr.substr(start, DataLen);//ä»0å¼€å§‹ï¼Œåˆ†å‰²24ä½å­—ç¬¦ä¸²
 			start = end;
 			end = end + DataLen;
 			tmp += encode(s.c_str());
@@ -82,7 +82,7 @@ string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 	return tmp;
 }
 
-//¹¹½¨Ç°µ¼Ö¡
+//æ„å»ºå‰å¯¼å¸§
 string Encode::BuildPreambleFrame()
 {
 	string tmp;
@@ -93,7 +93,7 @@ string Encode::BuildPreambleFrame()
 	return tmp;
 }
 
-//¹¹½¨ÏàÎ»Ö¡
+//æ„å»ºç›¸ä½å¸§
 string Encode::BuildPhaseFrame()
 {
 	string tmp;
