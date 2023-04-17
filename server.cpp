@@ -28,7 +28,7 @@ void reply(const Request & req, Response & resp)
 int main()
 {
     Server * server = Singleton<Server>::instance();
-    server->listen("", 8080);
+    server->listen("", 9023);
     server->bind("/hello", hello);
     server->bind("/reply", reply);
     server->start();

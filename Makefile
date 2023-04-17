@@ -10,8 +10,12 @@ OBJS := $(patsubst %.cpp, %.o, $(filter %.cpp, $(SRCS)))
 $(warning OBJS is ${OBJS})
 
 #编译选项
-CFLAGS = -g -O2 -Wall -Werror -Wno-unused -ldl -lpthread -fPIC -std=c++11
+CFLAGS = -g -O2 -Wall -Werror=class-memaccess -Wno-error=class-memaccess -Wno-unused -ldl -lpthread -fPIC -std=c++11
 $(warning CFLAGS is ${CFLAGS})
+
+# #消除警告选项
+# TAILFALGS = -fpermissive
+# $(warning TAILFALGS is ${TAILFALGS})
 
 #找出当前目录下所有的头文件
 INCLUDE_TEMP = $(shell find ./* -type d)
@@ -31,4 +35,4 @@ clean:
 	rm -f ${OBJS} ${OBJ_SERVER} ${EXE_SERVER}
 
 %.o: %.cpp
-	${CC} ${CFLAGS} -I. -c $< -o $@
+	${CC} ${CFLAGS} -I. -c $< -o $@ ${TAILFALGS}
