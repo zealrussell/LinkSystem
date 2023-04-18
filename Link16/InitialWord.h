@@ -1,5 +1,7 @@
 #pragma once
 #include "Word.hpp"
+#include <json/Json.h>
+using namespace yazi::json;
 
 // 75bit InitialWord
 class InitialWord : public Word<RS_Length::code_31_15, RS_Length::data_31_15>
@@ -22,6 +24,7 @@ public:
 	void to_symbol();
 	void handler_word(string &bit_data, string &type);
 	void show();
+	void assembleJson(Json &json);
 	string toString_70B();
 	string toString();
 	bitset<5> getBIP();

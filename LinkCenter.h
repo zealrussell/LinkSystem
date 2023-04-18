@@ -8,7 +8,7 @@ class LinkCenter
 {
 public:
 	void From22to16();
-	void From16to22();
+	void From16to22(const string& msg_encrypted_16, string& msg_encrypted_22);
 	void From11to16();
 	void From16to11();
 

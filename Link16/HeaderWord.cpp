@@ -48,6 +48,22 @@ void HeaderWord::show()
 	std::cout << "\tPR\t\t=\t" << m_PR << std::endl;
 	std::cout << "\tSTN\t\t=\t" << m_STN << std::endl;
 	std::cout << "\tSDU\t\t=\t" << m_SDU << std::endl;
+	Tools::save_log("======Message header generated======");
+	Tools::save_log("HeaderWord:");
+	Tools::save_log("\ttype\t=\t" + m_type.to_string());
+	Tools::save_log("\tPR\t\t=\t" + m_PR.to_string());
+	Tools::save_log("\tSTN\t\t=\t" + m_STN.to_string());
+	Tools::save_log("\tSDU\t\t=\t" + m_SDU.to_string());
+}
+
+void HeaderWord::assembleJson(Json &json)
+{
+	Json tmpJson;
+	tmpJson["type"] = m_type.to_string();
+	tmpJson["PR"] = m_PR.to_string();
+	tmpJson["STN"] = m_STN.to_string();
+	tmpJson["SDU"] = m_SDU.to_string();
+	json["headerWord"] = tmpJson;
 }
 
 string HeaderWord::toString()

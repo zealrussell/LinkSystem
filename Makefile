@@ -2,7 +2,7 @@
 CC = g++
 
 #找出当前目录下，所有的源文件（以.cpp结尾）
-SRCS := $(shell find ./* -type f | grep '\.cpp' | grep -v 'server\.cpp')
+SRCS := $(shell find ./* -type f | grep '\.cpp' | grep -v 'server\.cpp' | grep -v './Test/*')
 $(warning SRCS is ${SRCS})
 
 #确定cpp源文件对应的目标文件

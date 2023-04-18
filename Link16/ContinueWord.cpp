@@ -83,6 +83,22 @@ void ContinueWord::show()
 	std::cout << "\tsignal\t\t=\t" << m_signal << std::endl;
 	std::cout << "\tmessage\t\t=\t" << m_message << std::endl;
 	std::cout << "\tBIP\t\t=\t" << m_BIP << std::endl;
+	Tools::save_log("======ContinueWord has been filled in======");
+	Tools::save_log("continue_word:");
+	Tools::save_log("\tformat\t\t=\t" + m_format.to_string());
+	Tools::save_log("\tsignal\t\t=\t" + m_signal.to_string());
+	Tools::save_log("\tmessage\t\t=\t" + m_message.to_string());
+	Tools::save_log("\tBIP\t\t\t=\t" + m_BIP.to_string());
+}
+
+void ContinueWord::assembleJson(Json &json)
+{
+	Json tmpJson;
+	tmpJson["format"] = m_format.to_string();
+	tmpJson["signal"] = m_signal.to_string();
+	tmpJson["message"] = m_message.to_string();
+	tmpJson["BIP"] = m_BIP.to_string();
+	json["continueWord"].append(tmpJson);
 }
 
 string ContinueWord::toString_70B()

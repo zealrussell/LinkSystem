@@ -95,6 +95,26 @@ void InitialWord::show()
 	std::cout << "\tlength\t\t=\t" << m_length << std::endl;
 	std::cout << "\tmessage\t\t=\t" << m_message << std::endl;
 	std::cout << "\tBIP\t\t=\t" << m_BIP << std::endl;
+	Tools::save_log("======InitialWord has been filled in======");
+	Tools::save_log("initial_word:");
+	Tools::save_log("\tformat\t\t=\t" + m_format.to_string());
+	Tools::save_log("\tsignal\t\t=\t" + m_signal.to_string());
+	Tools::save_log("\tsub_signal\t=\t" + m_sub_signal.to_string());
+	Tools::save_log("\tlength\t\t=\t" + m_length.to_string());
+	Tools::save_log("\tmessage\t\t=\t" + m_message.to_string());
+	Tools::save_log("\tBIP\t\t\t=\t" + m_BIP.to_string());
+}
+
+void InitialWord::assembleJson(Json &json)
+{
+	Json tmpJson;
+	tmpJson["format"] = m_format.to_string();
+	tmpJson["signal"] = m_signal.to_string();
+	tmpJson["subSignal"] = m_sub_signal.to_string();
+	tmpJson["length"] = m_length.to_string();
+	tmpJson["message"] = m_message.to_string();
+	tmpJson["BIP"] = m_BIP.to_string();
+	json["initialWord"].append(tmpJson);
 }
 
 string InitialWord::toString_70B()
