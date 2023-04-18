@@ -1,5 +1,7 @@
 #pragma once
 #include "Word.hpp"
+#include <json/Json.h>
+using namespace yazi::json;
 
 // 75bit ContinueWord, can be sent out of sequence.
 
@@ -21,6 +23,7 @@ public:
 	void to_symbol();
 	void handler_word(string &bit_data);
 	void show();
+	void assembleJson(Json &json);
 	string toString_70B();
 	string toString();
 	bitset<5> getBIP();

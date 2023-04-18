@@ -80,6 +80,20 @@ void ExtendWord::show()
 	std::cout << "\tformat\t\t=\t" << m_format << std::endl;
 	std::cout << "\tmessage\t\t=\t" << m_message << std::endl;
 	std::cout << "\tBIP\t\t=\t" << m_BIP << std::endl;
+	Tools::save_log("======ExtendWord has been filled in======");
+	Tools::save_log("extend_word:");
+	Tools::save_log("\tformat\t\t=\t" + m_format.to_string());
+	Tools::save_log("\tmessage\t\t=\t" + m_message.to_string());
+	Tools::save_log("\tBIP\t\t\t=\t" + m_BIP.to_string());
+}
+
+void ExtendWord::assembleJson(Json &json)
+{
+	Json tmpJson;
+	tmpJson["format"] = m_format.to_string();
+	tmpJson["message"] = m_message.to_string();
+	tmpJson["BIP"] = m_BIP.to_string();
+	json["extendWord"].append(tmpJson);
 }
 
 string ExtendWord::toString_70B()

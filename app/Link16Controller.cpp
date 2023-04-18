@@ -6,16 +6,15 @@ REGISTER_CLASS(Link16Controller);
 REGISTER_CLASS_METHOD(Link16Controller, encode, void, const Request &, Response &);
 REGISTER_CLASS_METHOD(Link16Controller, decode, void, const Request &, Response &);
 
-void Link16Controller::encode(const Request & req, Response & resp)
+void Link16Controller::encode(const Request &req, Response &resp)
 {
     string msg = "!!!This is a warning message.";
-    string encode_str = interface::encoder_Link16(15, 0, msg);
-    Json json;
-    json["encode_str"] = encode_str;
+    Json json = interface::encoder_Link16(15, 0, msg);
+    std::cout << json << std::endl;
     resp.json(json.str());
 }
 
-void Link16Controller::decode(const Request & req, Response & resp)
+void Link16Controller::decode(const Request &req, Response &resp)
 {
     resp.html("decode");
 }

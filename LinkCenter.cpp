@@ -1,35 +1,38 @@
 #include "LinkCenter.h"
 
-// 1. ´ÓÎÄ±¾ÖÐ¶ÁÈ¡Êý¾Ý
-// 2. ½øÐÐ×ª»»
+// 1. ï¿½ï¿½ï¿½Ä±ï¿½ï¿½Ð¶ï¿½È¡ï¿½ï¿½ï¿½ï¿½
+// 2. ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
 
 void LinkCenter::From22to16()
 {
-	// link22 ÏûÏ¢Êý¾Ý
+	// link22 ï¿½ï¿½Ï¢ï¿½ï¿½ï¿½ï¿½
 	std::string msg_22, msg_16;
 	int m_22, n_22, p_22;
 	int n_16 = 0, m_16 = 0;
-	// 1. ´Ólink22 Êý¾ÝÖÐ½âÂë³ö msg, m, n, p
+	// 1. ï¿½ï¿½link22 ï¿½ï¿½ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ msg, m, n, p
 	link22Center.decoder_Link22(msg_22, n_22, m_22, p_22);
 
-	// 2. ÅÐ¶Ï ½øÐÐÄÇÖÖ×ª»»
+	// 2. ï¿½Ð¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½ï¿½
 
-	// case 1: Ö±Òë 
-	// Ñ¡Ôñ F00.7-10 ÃÜÔ¿¹ö¶¯ÏûÏ¢×÷Îª
-	if (m_22 == 0 && n_22 == 7 && p_22 == 10) {
+	// case 1: Ö±ï¿½ï¿½
+	// Ñ¡ï¿½ï¿½ F00.7-10 ï¿½ï¿½Ô¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½Îª
+	if (m_22 == 0 && n_22 == 7 && p_22 == 10)
+	{
 		n_16 = 31;
 		m_16 = 11;
 		msg_16 = msg_22;
 	}
-	// case 2£º×ªÒë
-	else if (m_22 == 2 && n_22 == 2) {
+	// case 2ï¿½ï¿½×ªï¿½ï¿½
+	else if (m_22 == 2 && n_22 == 2)
+	{
 		n_16 = 3;
 		m_16 = 2;
 		msg_16 = msg_22.substr(0, msg_22.find_first_of(":"));
 	}
-	// case 3£ºÉ¾Òë
-	// F5-0 ¿ÕÖÐº½¼£µÄº½ÏòºÍËÙ¶È
-	else if (m_22 == 4 && n_22 == 1) {
+	// case 3ï¿½ï¿½É¾ï¿½ï¿½
+	// F5-0 ï¿½ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½Äºï¿½ï¿½ï¿½ï¿½ï¿½Ù¶ï¿½
+	else if (m_22 == 4 && n_22 == 1)
+	{
 		n_16 = 3;
 		m_16 = 2;
 		msg_16 = msg_22.substr(0, msg_22.find_first_of(":"));
@@ -37,28 +40,32 @@ void LinkCenter::From22to16()
 	link16Center.encoder_Link16(msg_16, n_16, m_16);
 }
 
-void LinkCenter::From16to22() {
-	
+void LinkCenter::From16to22(const string &msg_encrypted_16, string &msg_encrypted_22)
+{
+
 	string msg_16, msg_22;
 	int n_16, m_16;
 	link16Center.decoder_Link16(msg_16, n_16, m_16);
 	std::cout << "-------------link16 decode finish ------------" << std::endl;
 	int n_22 = 0, m_22 = 0, p_22 = 0;
-	// Ö±Òë
-	if (n_16 == 31 && m_16 == 11) {
+	// ç›´è¯‘
+	if (n_16 == 31 && m_16 == 11)
+	{
 		m_22 = 0;
 		n_22 = 7;
 		p_22 = 10;
 		msg_22 = msg_16;
 	}
-	// ×ªÒë
-	else if (n_16 == 00 && m_16 == 00) {
+	// è½¬è¯‘
+	else if (n_16 == 00 && m_16 == 00)
+	{
 		m_22 = 1;
 		n_22 = 4;
 		p_22 = -1;
 	}
-	// Ôö Òë
-	else if (n_16 == 3 && m_16 == 2) {
+	// å¢žè¯‘
+	else if (n_16 == 3 && m_16 == 2)
+	{
 		m_22 = 1;
 		n_22 = 4;
 		p_22 = -1;
@@ -74,7 +81,6 @@ void LinkCenter::From11to16()
 	int n_11;
 
 	link11Center.decoder_Link11(msg_11, n_11);
-
 }
 
 void LinkCenter::From16to11()
@@ -82,10 +88,9 @@ void LinkCenter::From16to11()
 	string msg_16, msg_22;
 	int n_16, m_16;
 	link16Center.decoder_Link16(msg_16, n_16, m_16);
-	if (n_16 == 1 && m_16 == 1) {
-
+	if (n_16 == 1 && m_16 == 1)
+	{
 	}
-
 }
 
 void LinkCenter::create_Link11()
@@ -93,13 +98,12 @@ void LinkCenter::create_Link11()
 	// link11Center.en coder_Link11();
 }
 
-
-void LinkCenter::create_Link16(const std::string& msg, int n, int m)
+void LinkCenter::create_Link16(const std::string &msg, int n, int m)
 {
 	link16Center.encoder_Link16(msg, n, m);
 }
 
-void LinkCenter::create_Link22(const std::string& msg, int n, int m, int p)
+void LinkCenter::create_Link22(const std::string &msg, int n, int m, int p)
 {
 	link22Center.encoder_Link22(msg, n, m, p);
 }

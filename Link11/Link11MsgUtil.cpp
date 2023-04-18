@@ -47,7 +47,7 @@ std::string Link11MsgUtil::CharArrayToBitStr(const uint8_t *data, int char_lengt
 std::string Link11MsgUtil::StrToBitStr(const std::string &data) {
     size_t len = data.length();
     std::string res;
-    for (int i = 0; i < len; i++) {
+    for (size_t i = 0; i < len; i++) {
         std::bitset<8> bits = std::bitset<8>(data[i]);
         res += bits.to_string();
     }
@@ -63,7 +63,7 @@ std::string Link11MsgUtil::BitStrToStr(const std::string &data) {
     if (data.length() == 0 || data.empty()) return "";
     size_t len = data.length();
     std::string res;
-    for (int i = 0; i < len; i = i + 8) {
+    for (size_t i = 0; i < len; i = i + 8) {
         std::string tmp;
         for (int j = 0; j < 8; j++) {
             tmp += data[i + j];

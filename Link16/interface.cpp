@@ -1,10 +1,11 @@
 #include "interface.h"
+#include <time.h>
 
 namespace interface
 {
 	// n. m: the type of tactical message sent.
 	// inputs: the main content of the message.
-	string encoder_Link16(int32_t n, int32_t m, const string &inputs)
+	Json encoder_Link16(int32_t n, int32_t m, const string &inputs)
 	{
 		// Data preparation.
 		string type = to_string(n) + " " + to_string(m);
@@ -13,12 +14,6 @@ namespace interface
 			std::cout << "The message type sent does not exist." << std::endl;
 			return "-1";
 		}
-		std::cout << "The message type sent is:" << g_JType[type] << std::endl;
-
-		srand((unsigned)time(NULL));
-		string bit_data = Tools::StrToBitStr(inputs);
-		std::cout << "raw_data = " << inputs << std::endl;
-		std::cout << "bit_data = " << bit_data << std::endl;
 
 		// Determine if the file exists and delete it if it exists.
 		if (!Tools::deleteFile())
@@ -26,9 +21,33 @@ namespace interface
 			return "-2";
 		}
 
+		Tools::save_log("The message type sent is:" + g_JType[type]);
+		std::cout << "The message type sent is:" << g_JType[type] << std::endl;
+
+		srand((unsigned)time(NULL));
+		string bit_data = Tools::StrToBitStr(inputs);
+		Tools::save_log("raw_data = " + inputs);
+		std::cout << "raw_data = " << inputs << std::endl;
+		Tools::save_log("bit_data = " + bit_data);
+		std::cout << "bit_data = " << bit_data << std::endl;
+
+		// Get system time
+		time_t timep;
+
+		// Json to send
+		Json json_res;
+		json_res["linkType"] = "link16";
+		json_res["headerWord"] = 0;
+		json_res["initialWord"] = Json("json_array");
+		json_res["extendWord"] = Json("json_array");
+		json_res["continueWord"] = Json("json_array");
+		json_res["encryptedMsg"] = 0;
+		json_res["dataTime"] = 0;
+
 		bitset<15> STN = bitset<15>(Tools::generateBIN(15));
 		HeaderWord headerWord = HeaderWord(STN);
 		headerWord.show();
+		headerWord.assembleJson(json_res);
 
 		size_t bit_length = bit_data.length();
 		// Encapsulation and sending process: Encapsulation using standard format (STD):
@@ -43,8 +62,11 @@ namespace interface
 			bit_length = bit_data.length();
 			if (bit_length <= 0)
 			{
-				// ִPerform 210bit parity and subsequent steps, and finally exit.
+				// Perform 210bit parity and subsequent steps, and finally exit.
 				encode_str += Tools::handlerSTDP(headerWord, iword, eword, cword);
+				json_res["encryptedMsg"] = encode_str;
+				time(&timep);
+				json_res["dataTime"] = ctime(&timep);
 				iword.clear();
 				eword.clear();
 				cword.clear();
@@ -52,7 +74,7 @@ namespace interface
 			}
 			if (flag == 0 && bit_length > 0)
 			{
-				// ִPerform 210bit parity check and subsequent steps, and proceed with a new round of packaging.
+				// Perform 210bit parity check and subsequent steps, and proceed with a new round of packaging.
 				encode_str += Tools::handlerSTDP(headerWord, iword, eword, cword);
 				iword.clear();
 				eword.clear();
@@ -66,6 +88,7 @@ namespace interface
 				iword.clear();
 				iword.handler_word(bit_data, type);
 				iword.show();
+				iword.assembleJson(json_res);
 				break;
 			}
 			case 2:
@@ -73,6 +96,7 @@ namespace interface
 				eword.clear();
 				eword.handler_word(bit_data);
 				eword.show();
+				eword.assembleJson(json_res);
 				break;
 			}
 			case 1:
@@ -80,6 +104,7 @@ namespace interface
 				cword.clear();
 				cword.handler_word(bit_data);
 				cword.show();
+				cword.assembleJson(json_res);
 				break;
 			}
 			default:
@@ -87,7 +112,7 @@ namespace interface
 			}
 			flag--;
 		}
-		return encode_str;
+		return json_res;
 	}
 
 	int32_t decoder_Link16(string &raw_data, int32_t &n, int32_t &m)

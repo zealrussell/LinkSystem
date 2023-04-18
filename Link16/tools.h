@@ -27,7 +27,7 @@
 namespace Tools
 {
 	// encode tools
-	inline void save_msg(const string &msg);
+	inline void save_log(const string &log);
 	inline bool deleteFile();
 	inline string generateBIN(int length);
 	inline vector<string> stringSplit(const string &str, char delim);
@@ -56,13 +56,10 @@ namespace Tools
 	inline bool decode_BIP(string &bit_str);
 }
 
-// inline int RS(const size_t codeLength, const size_t dataLength, string &message, symbol *symbol_RS_word);
-
 namespace Tools
 {
-	void save_msg(const string &msg)
+	void save_log(const string &log)
 	{
-		std::cout << "A STDP message has been successfully sent." << std::endl;
 		ofstream fout(FILENAME, ios_base::app);
 		if (fout.is_open() == false)
 		{
@@ -70,8 +67,8 @@ namespace Tools
 			return;
 		}
 
-		// Write the data to be sent.
-		fout << msg;
+		// Write the logs to be sent.
+		fout << log << std::endl;
 		fout.close();
 		return;
 	}
@@ -286,9 +283,12 @@ namespace Tools
 			}
 		}
 		res += RS_cword[30].to_string();
+		save_log("======The interweave STDP message is as follows:======");
 		std::cout << "======The interweave STDP message is as follows:======\n";
+		save_log(res);
 		std::cout << res << std::endl;
-		save_msg(res);
+		save_log("A STDP message has been successfully sent.");
+		std::cout << "A STDP message has been successfully sent." << std::endl;
 
 		// Release resources.
 		delete[] bit_data;
@@ -308,12 +308,14 @@ namespace Tools
 					   ExtendWord &eword, ContinueWord &cword)
 	{
 		// Perform parity check, 70bit -> 75bit.
+		save_log("======Starting parity check======");
 		std::cout << "======"
 				  << "Starting parity check"
 				  << "======" << std::endl;
 		Tools::BIP(hword, iword, eword, cword);
 
 		// Message encryption.
+		save_log("======Starting AES encryption======");
 		std::cout << "======"
 				  << "Starting AES encryption"
 				  << "======" << std::endl;
@@ -321,30 +323,35 @@ namespace Tools
 
 		// Symbol conversion followed by RS encoding.
 		hword.to_symbol();
+		save_log("======HeaderWord executes RS error correction encoding. 7Symbol --> 16Symbol======");
 		std::cout << "======"
 				  << "HeaderWord executes RS error correction encoding. 7Symbol --> 16Symbol"
 				  << "======" << std::endl;
 		hword.RS_handler();
 
 		iword.to_symbol();
+		save_log("======InitialWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "InitialWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		iword.RS_handler();
 
 		eword.to_symbol();
+		save_log("======ExtendWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "ExtendWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		eword.RS_handler();
 
 		cword.to_symbol();
+		save_log("======ContinueWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "ContinueWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		cword.RS_handler();
 
 		// Interleave and send.
+		save_log("======Start performing character interleaving======");
 		std::cout << "======"
 				  << "Start performing character interleaving"
 				  << "======" << std::endl;
@@ -623,85 +630,3 @@ namespace Tools
 		return (str_BIP_cmp == str_BIP) ? true : false;
 	}
 }
-
-// int RS(const size_t codeLength, const size_t dataLength, string &message, symbol *symbol_msg)
-// {
-// 	/* Finite Field Parameters */
-// 	const std::size_t field_descriptor = 5;
-// 	const std::size_t generator_polynomial_index = 0;
-// 	const std::size_t generator_polynomial_root_count = 16;
-
-// 	/* Reed Solomon Code Parameters */
-// 	const std::size_t code_length = RS_Length::code_31_15; //(2^5 - 1)
-// 	const std::size_t data_length = RS_Length::data_31_15;
-// 	const std::size_t fec_length = RS_Length::fec_31_15;
-
-// 	/* 5-bit Symbol Parameter */
-// 	const int mask = 0x0000001F;
-
-// 	/* Instantiate Finite Field and Generator Polynomials */
-// 	const schifra::galois::field field(field_descriptor,
-// 									   schifra::galois::primitive_polynomial_size02,
-// 									   schifra::galois::primitive_polynomial02);
-
-// 	schifra::galois::field_polynomial generator_polynomial(field);
-
-// 	if (
-// 		!schifra::make_sequential_root_generator_polynomial(field,
-// 															generator_polynomial_index,
-// 															generator_polynomial_root_count,
-// 															generator_polynomial))
-// 	{
-// 		std::cout << "Error - Failed to create sequential root generator!" << std::endl;
-// 		return 1;
-// 	}
-
-// 	/* Instantiate Encoder and Decoder (Codec) */
-// 	typedef schifra::reed_solomon::encoder<code_length, fec_length> encoder_t;
-
-// 	const encoder_t encoder(field, generator_polynomial);
-
-// 	/* Instantiate RS Block For Codec */
-// 	schifra::reed_solomon::block<code_length, fec_length> block;
-
-// 	/* Pad message with nulls up until the code-word length */
-// 	message.resize(code_length, 0x00);
-
-// 	/* Transform message into Reed-Solomon encoded codeword */
-// 	//??Symbol???????message?��????????????block???��??��??????????????????block.data??(????????????????FEC??)
-// 	if (!encoder.encode(message, block))
-// 	{
-// 		std::cout << "Error - Critical encoding failure! "
-// 				  << "Msg: " << block.error_as_string() << std::endl;
-// 		return 1;
-// 	}
-
-// 	//?????str_fec
-// 	string str_fec(RS_Length::fec_31_15, 0x00);
-// 	block.fec_to_string(str_fec);
-
-// 	if (codeLength == RS_Length::code_31_15 && dataLength == RS_Length::data_31_15)
-// 	{
-// 		// Assemble(Word)
-// 		for (int i = RS_Length::data_31_15; i < RS_Length::code_31_15; i++)
-// 		{
-// 			bitset<8> temp = bitset<8>(str_fec[i - RS_Length::data_31_15]);
-// 			symbol_msg[i] = symbol(temp.to_string().substr(3, 5));
-// 		}
-// 	}
-
-// 	else if (codeLength == RS_Length::code_16_7 && dataLength == RS_Length::data_16_7)
-// 	{
-// 		// Assemble(Header)??????fec???7Symbol?????��
-// 		for (int i = RS_Length::data_16_7; i < RS_Length::code_16_7; i++)
-// 		{
-// 			bitset<8> temp = bitset<8>(str_fec[i]);
-// 			symbol_msg[i] = symbol(temp.to_string().substr(3, 5));
-// 		}
-// 	}
-// 	else
-// 	{
-// 		return 1;
-// 	}
-// 	return 0;
-// }
