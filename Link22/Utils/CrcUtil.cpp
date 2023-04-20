@@ -61,7 +61,7 @@ bitset<16> CrcUtil::crc16(uint16 data[], int len) {
     uint CRC_SIZE16 = 16;
     uint remainder = 0;
     int nremainder = 0;
-    size_t j,k;
+    int j,k;
     uint bit,lb;
     uint fb,cb;
     for (int i = 0; i < len; i++) {
@@ -94,7 +94,7 @@ void CrcUtil::get_crc16(uint8_t *bufData, uint buflen, uint8_t *pcrc) {
     int ret = 0;
     unsigned short CRC = 0xffff;
     unsigned short POLYNOMIAL = 0x8001;
-    size_t i, j;
+    int i, j;
 
     //指令为空
     if (bufData == NULL) {

@@ -6,14 +6,15 @@
 #include "F0nMessage.h"
 #include "FnpMessage.h"
 #include "FnMessage.h"
+#include "../Utils/Link22Variable.h"
 
 #define DMSGLEN 2 * MSGLEN
+
+extern std::map<std::string, std::string> CodetoName;
 
 ConstructCenter::ConstructCenter(){
     printf("Construct begin \n\n");
     initCenter();
-    typeMap[0][7][10] = "秘钥滚动";
-    typeMap[0][1][2] = "电子战 位置";
 }
 
 
@@ -21,9 +22,16 @@ uint8_t *ConstructCenter::beginAssemble (const std::bitset<72> &b1, const std::b
     std::bitset<72> p[2];
     p[0] = b1;
     p[1] = b2;
+    Json dataJson;
     uint8_t *aesCode = beginAes(p, 2);
     uint8_t *crcCode = beginCrc(aesCode, 18);
     uint8_t *rsCode = beginRs(crcCode, aesCode,18);
+    printf("...assembel\n");
+    dataJson["aes"] = msgUtil.CharArrayToBitStr(aesCode, 16);
+    dataJson["crc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
+    dataJson["rs"] = msgUtil.CharArrayToBitStr(rsCode, 36);
+    link22Json["data"].append(dataJson);
+
     delete aesCode;
     delete crcCode;
 
@@ -38,13 +46,20 @@ uint8_t *ConstructCenter::beginAssemble (const std::bitset<72> &b1, const std::b
 uint8_t *ConstructCenter::beginDisassemble(const uint8_t *data) {
 
     uint8_t *rsCode = beginDeRs(data,36);
-
     uint8_t crcCode[2];
     uint8_t aesCode[18];
+
+    Json link22DecodeDataJson;
+    link22DecodeDataJson["ders"] = msgUtil.CharArrayToBitStr(data, 36);
+
     // 从rsCode中提取crcCode和aesCode
     memcpy(crcCode, rsCode, 2 * sizeof(uint8_t));
     memcpy(aesCode, rsCode + 3 * sizeof(uint8_t), 18 * sizeof(uint8_t));
     delete rsCode;
+
+    link22DecodeDataJson["decrc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
+    link22DecodeDataJson["deaes"] = msgUtil.CharArrayToBitStr(aesCode, 18);
+    link22DecodeJson["data"].append(link22DecodeDataJson);
 
     // 通过比较crcCode，判断传输过程中是否发生错误
     bool crcFlag = beginDeCrc(crcCode, aesCode, 18);
@@ -205,11 +220,24 @@ uint8_t *ConstructCenter::beginDeAes(const uint8_t *data, int arrayNum) {
  * @return
  */
 
-void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int p) {
-    // printf("Please selece Link22 type: \n");
-    // printf("1. F0n.m-p    2. Fn-p     3. Fn\n");
+Json ConstructCenter::constructMessage(const std::string &msg, int n, int m, int p) {
+    std::string key = std::to_string(n) + "_" + std::to_string(m) + "_" + std::to_string(p);
+    if (CodetoName.count(key) == 0) {
+        printf("No such message type!\n");
+        return Json("No such message type!");
+    } else {
+        printf("the code name is: %s\n", CodetoName[key]);
+    }
+    link22Json.clear();
+
+    // link类型
+    link22Json["linkType"] = "link22"; 
+    link22Json["originMsg"] = msg;
+    link22Json["data"] = Json("json_array");
+
     uint8_t *res = nullptr;
     int type = msgUtil.getTypeByNPM(n, p, m);
+    printf("th link type is: %d\n", type);
 
     if (type == 1) {
         printf("F0n.m-p message will be construct....\n");
@@ -218,7 +246,7 @@ void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
             const uint8_t *message = msgUtil.StrToCharArray(msg, msg.length());
             changeKey(message);
             delete[] message;
-            return;
+            return Json("change key success");
         } else if (n == 0 && m == 1 && p == 2) {
           
             res = beginConstruct(msg, 1, n ,p ,m);
@@ -226,10 +254,14 @@ void ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
             res = beginConstruct(msg, 1, n, p, m);
         }
     } else if (type == 2) {
+        printf("Fn-p message will be construct....\n");
         res = beginConstruct(msg, 2, n ,p);
     } else if (type == 3) {
+        printf("Fn message will be construct....\n");
         res = beginConstruct(msg, 3, n);
     }
+    // link22Json["encodedData"] = msgUtil.CharArrayToBitStr(res,);
+    return link22Json;
 }
 
 // 填充，生成F系列消息
@@ -246,7 +278,9 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
     else MSGLEN = 62;
     int num = 0;
     while (num * DMSGLEN < strLen) num++;
-    printf("%d data will be constructed \n",num);
+
+    printf("%d symbol will be constructed \n",num);
+
     uint8_t *temp = new uint8_t [num * 36 * sizeof(uint8_t)];
     uint8_t *res = temp;
     // 3. 分段填充
@@ -260,7 +294,7 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
             F0nMessage m2(str.substr(i + MSGLEN,DMSGLEN), n, m, p);
             data = beginAssemble(m1.getBitsetData(), m2.getBitsetData());
         } else if (type == 2) {
-            FnpMessage m1(str.substr(i,MSGLEN), n, p);
+            FnpMessage m1(str.substr(i, MSGLEN), n, p);
             FnpMessage m2(str.substr(i + MSGLEN,DMSGLEN), n, p);
             data = beginAssemble(m1.getBitsetData(), m2.getBitsetData());
         } else if (type == 3) {
@@ -323,12 +357,18 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
  * 解密函数
  * @param data 待解密是数据
  */
-void ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p) {
+Json ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p) {
     // int arrayNum;
     // printf("请输入码元个数：");
     // std::cin >> arrayNum;
     printf("Origin %d data: ", symbolNum);
     print(data, 36 * symbolNum);
+
+    link22DecodeJson.clear();
+    link22DecodeJson["linkType"] = "link22";
+    link22DecodeJson["type"] = "decode";
+    link22DecodeJson["originData"] = msgUtil.CharArrayToBitStr(data, 36 * symbolNum);
+    link22DecodeJson["data"] = Json("json_array");
 
     std::string message;
     bool flag = true;
@@ -356,6 +396,8 @@ void ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
     // 将二进制消息转换成字符消息
     msg = msgUtil.BitStrToStr(message);
     printf("DECOD:: The real message is: %s\n", msg.c_str());
+    link22DecodeJson["message"] = msg;
+    return link22DecodeJson;
 }
 
 
