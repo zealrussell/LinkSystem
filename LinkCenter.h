@@ -8,14 +8,13 @@ class LinkCenter
 {
 public:
 	void From22to16();
-	void From16to22(const string& msg_encrypted_16, string& msg_encrypted_22);
+	void From16to22();
 	void From11to16();
 	void From16to11();
 
 	void create_Link11();
-	void create_Link16(const std::string &msg, int n, int m);
-	void create_Link22(const std::string &msg, int n, int m = 0, int p = 0);
-
+	void create_Link16(const std::string& msg, int n, int m);
+	void create_Link22(const std::string& msg, int n, int m = 0, int p = 0);
 private:
 	std::string getData();
 
@@ -23,3 +22,4 @@ private:
 	Link16Center link16Center;
 	Link22Center link22Center;
 };
+

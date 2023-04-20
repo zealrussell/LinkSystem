@@ -31,6 +31,7 @@ int main()
     server->listen("", 9023);
     server->bind("/hello", hello);
     server->bind("/reply", reply);
+    //server->bind("/22encode", );
     server->start();
     return 0;
 }

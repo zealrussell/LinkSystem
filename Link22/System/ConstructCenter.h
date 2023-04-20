@@ -6,23 +6,24 @@
 #define LINK22_CONSTRUCTCENTER_H
 
 #include <vector>
+#include <json/Json.h>
 
 #include "../Utils/MsgUtil.h"
 #include "../Utils/CrcUtil.h"
 #include "../Utils/AESUtil.h"
 #include "../Utils/RSInclude/rs.hpp"
 
+using namespace yazi::json;
 class ConstructCenter {
     public:
         ConstructCenter();
+    
         ~ConstructCenter();
 
         // 入口
-        void constructMessage(const std::string &msg, int n = 0,int m = 0, int p = 0);
+        Json constructMessage(const std::string &msg, int n = 0,int m = 0, int p = 0);
         // 解密
-        void crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p);
-        // 报文类型
-        std::string typeMap[4][10][11];
+        Json crackMessage(const uint8_t *data, int symbolNum, std::string &msg, int &n, int &m, int &p);
 
         static void print(const unsigned char* state, int len);
 
@@ -47,10 +48,14 @@ class ConstructCenter {
         bool beginDeCrc(const uint8_t* crcCode, const uint8_t *data, int arrayNum);
         uint8_t *beginDeRs(const uint8_t *rsCode, int arrayNum);
 
+        Json link22Json;
+        Json link22DecodeJson;
+        
         MsgUtil msgUtil;
         AESModeOfOperation aes;
         CrcUtil crcUtil;
         RS::ReedSolomon<21, 15> rs;
+        
 
 };
 
