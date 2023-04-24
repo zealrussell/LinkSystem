@@ -95,7 +95,9 @@ void ContinueWord::assembleJson(Json &json)
 {
 	Json tmpJson;
 	tmpJson["format"] = m_format.to_string();
-	tmpJson["signal"] = m_signal.to_string();
+	tmpJson["signal"] = 0;
+	tmpJson["subSignal"] = 0;
+	tmpJson["length"] = 0;
 	tmpJson["message"] = m_message.to_string();
 	tmpJson["BIP"] = m_BIP.to_string();
 	json["continueWord"].append(tmpJson);

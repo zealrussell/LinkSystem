@@ -37,6 +37,8 @@ namespace interface
 		// Json to send
 		Json json_res;
 		json_res["linkType"] = "link16";
+		json_res["operation"] = "encode";
+		json_res["originMsg"] = inputs;
 		json_res["headerWord"] = 0;
 		json_res["initialWord"] = Json("json_array");
 		json_res["extendWord"] = Json("json_array");

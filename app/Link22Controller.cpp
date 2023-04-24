@@ -8,7 +8,7 @@ REGISTER_CLASS_METHOD(Link22Controller, decode, void, const Request &, Response 
 
 void Link22Controller::encode(const Request & req, Response & resp){
     string msg = "!!!This is a warning message.";
-    Json json = link22Center.encoder_Link22("hello zeal", 0 ,7, 10);
+    Json json = link22Center.encoder_Link22("Hello, world! My name is Michael, I'm 22 years old.", 0 ,1, 0);
     std::cout << json << std::endl;
     resp.json(json.str());
 };
