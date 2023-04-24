@@ -405,4 +405,4 @@ FodyWeavers.xsd
 *.app
 main
 server
-Test/*
+Test/
