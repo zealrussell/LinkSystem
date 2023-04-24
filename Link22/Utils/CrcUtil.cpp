@@ -94,7 +94,7 @@ void CrcUtil::get_crc16(uint8_t *bufData, uint buflen, uint8_t *pcrc) {
     int ret = 0;
     unsigned short CRC = 0xffff;
     unsigned short POLYNOMIAL = 0x8001;
-    int i, j;
+    size_t i, j;
 
     //指令为空
     if (bufData == NULL) {

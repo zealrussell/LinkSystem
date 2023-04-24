@@ -404,3 +404,5 @@ FodyWeavers.xsd
 *.out
 *.app
 main
+server
+Test/*
