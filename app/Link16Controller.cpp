@@ -8,7 +8,6 @@ REGISTER_CLASS_METHOD(Link16Controller, decode, void, const Request &, Response 
 
 void Link16Controller::encode(const Request &req, Response &resp)
 {
-    
     string msg = req.post("message");
     Json json = interface::encoder_Link16(15, 0, msg);
     std::cout << json << std::endl;

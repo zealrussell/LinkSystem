@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="linksystem\LinkCenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\LinkSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\AES.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\ContinueWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\decodeTools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\ExtendWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\HeaderWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\InitialWord.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\Link16Center.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\md5.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\STDPMsg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\tools.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link16\Word.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\Link22Center.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\system\ConstructCenter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\system\F0nMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\system\FnMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\system\FnpMessage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\utils\AESUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\utils\CrcUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="linksystem\link22\utils\MsgUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\encode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\hamming.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\Decode.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\Link11MsgUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\Link11Center.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LinkSystem\Link11\Link11Center.h">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Link22Variable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="linksystem\LinkCenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\AES.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\ContinueWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\CRC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\dataType.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\decodeTools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\ExtendWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\HeaderWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\InitialWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\Link16Center.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\md5.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\STDPMsg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\tools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_crc.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_ecc_traits.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_error_processes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_fileio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_galois_field.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_galois_field_element.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_galois_field_polynomial.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_reed_solomon_bitio.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_reed_solomon_block.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_reed_solomon_decoder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_reed_solomon_encoder.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\schifra_sequential_root_generator_polynomial_creator.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link16\Word.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\Link22Center.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\system\ConstructCenter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\system\F0nMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\system\FnMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\system\FnpMessage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\AESUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\CrcUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\MsgUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\rsinclude\gf.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\rsinclude\poly.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="linksystem\link22\utils\rsinclude\rs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkSystem\Link11\Decode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkSystem\Link11\encode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkSystem\Link11\hamming.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LinkSystem\Link11\Link11MsgUtil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Link22Variable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="linksystem\link16\Link16.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
