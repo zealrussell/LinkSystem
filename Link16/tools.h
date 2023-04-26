@@ -12,6 +12,7 @@
 #include <bitset>
 #include <fstream>
 #include <unistd.h>
+#include "dataType.h"
 
 #define NO_GFLUT
 #include "schifra_galois_field.hpp"
@@ -31,6 +32,8 @@ namespace Tools
 	inline bool deleteFile();
 	inline string generateBIN(int length);
 	inline vector<string> stringSplit(const string &str, char delim);
+	template <class Type>
+	Type stringToNum(const string &str);
 	inline string StrToBitStr(const string &str);
 	inline string BitStrTostr(const string &str);
 	inline uint8_t *StrToCharArray(string &str_data, int char_length);
@@ -54,16 +57,20 @@ namespace Tools
 	inline int decode_RS(string &message, string &str_data);
 	inline string AES_Decrypt(string &char_data);
 	inline bool decode_BIP(string &bit_str);
+
+	// handle planes
+	inline Plane *assemble_plane();
+	inline Plane assemble_plane_json(Json plane_json);
 }
 
 namespace Tools
 {
 	void save_log(const string &log)
 	{
-		ofstream fout(FILENAME, ios_base::app);
+		ofstream fout(LINK16_FILEPATH, ios_base::app);
 		if (fout.is_open() == false)
 		{
-			std::cout << "Open file " << FILENAME << " Failed." << std::endl;
+			std::cout << "Open file " << LINK16_FILEPATH << " Failed." << std::endl;
 			return;
 		}
 
@@ -76,9 +83,9 @@ namespace Tools
 	// Determine if the file exists and delete it if it exists.
 	bool deleteFile()
 	{
-		if (access(FILENAME, F_OK) == 0)
+		if (access(LINK16_FILEPATH, F_OK) == 0)
 		{
-			if (remove(FILENAME) == 0)
+			if (remove(LINK16_FILEPATH) == 0)
 			{
 				std::cout << "File successfully deleted." << std::endl;
 				return true;
@@ -116,6 +123,15 @@ namespace Tools
 			}
 		}
 		return elems;
+	}
+
+	template <class Type>
+	Type stringToNum(const string &str)
+	{
+		std::stringstream ss(str);
+		Type num;
+		ss >> num;
+		return num;
 	}
 
 	string StrToBitStr(const string &str)
@@ -361,10 +377,10 @@ namespace Tools
 	string read_msg()
 	{
 		ifstream fin;
-		fin.open(FILENAME, ios::in);
+		fin.open(LINK16_FILEPATH, ios::in);
 		if (fin.is_open() == false)
 		{
-			std::cout << "Open file" << FILENAME << "Failed." << std::endl;
+			std::cout << "Open file" << LINK16_FILEPATH << "Failed." << std::endl;
 			return "";
 		}
 		// Read one line at a time.
@@ -628,5 +644,49 @@ namespace Tools
 
 		string str_BIP_cmp = "0" + bit_crc.to_string().substr(4, 4) + "0" + bit_crc.to_string().substr(8, 4) + "0" + bit_crc.to_string().substr(12, 4);
 		return (str_BIP_cmp == str_BIP) ? true : false;
+	}
+
+	Plane *assemble_plane()
+	{
+		std::ifstream fin(PLANES_FILEPATH, std::ios_base::in);
+		if (fin.is_open())
+		{
+			std::cout << "file open" << std::endl;
+		}
+		string buffer;
+		string json;
+		while (fin >> buffer)
+		{
+			json += buffer;
+		}
+		fin.close();
+
+		Json read_json;
+		read_json.parse(json);
+		std::cout << "read_json = " << read_json << std::endl;
+
+		Json uav0 = read_json.get("uav0");
+		Json uav1 = read_json.get("uav1");
+		Json uav2 = read_json.get("uav2");
+
+		Plane plane0 = assemble_plane_json(uav0);
+		Plane plane1 = assemble_plane_json(uav1);
+		Plane plane2 = assemble_plane_json(uav2);
+
+		Plane *planes = new Plane[3]{plane0, plane1, plane2};
+		return planes;
+	}
+
+	Plane assemble_plane_json(Json plane_json)
+	{
+		Plane plane;
+		plane.label = plane_json.get("label").asString();
+		plane.vx = stringToNum<double>(plane_json.get("vx").asString());
+		plane.vy = stringToNum<double>(plane_json.get("vy").asString());
+		plane.vz = stringToNum<double>(plane_json.get("vz").asString());
+		plane.x = stringToNum<double>(plane_json.get("x").asString());
+		plane.y = stringToNum<double>(plane_json.get("y").asString());
+		plane.z = stringToNum<double>(plane_json.get("z").asString());
+		return plane;
 	}
 }

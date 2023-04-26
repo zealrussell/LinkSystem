@@ -68,7 +68,7 @@ uint8_t *MsgUtil::BitsetToCharArray(const std::bitset<N> *b, int arraySize) {
     // 2.将每8位字符串转位uint8
     uint8_t* data = new uint8_t[len / 8];
     int j = 0;
-    for (int i = 0; i < s.length(); i+=8) {
+    for (size_t i = 0; i < s.length(); i+=8) {
         std::string temp = s.substr(i, 8);
         uint8_t d = std::stoi(temp, 0,2);
         data[j++] = d;

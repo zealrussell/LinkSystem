@@ -8,11 +8,10 @@ namespace yazi
     namespace app
     {
 
-        class User : public Controller
+        class PlaneController : public Controller
         {
         public:
-            void profile(const Request &req, Response &resp);
+            void planes(const Request &req, Response &resp);
         };
-
     }
 }
