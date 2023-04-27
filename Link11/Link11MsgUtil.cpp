@@ -5,7 +5,7 @@
 #include "Link11MsgUtil.h"
 #include <fstream>
 
-const std::string Link11MsgUtil::FILE_NAME = "./data.txt";
+const std::string Link11MsgUtil::FILE_NAME = "./data/link11_data.txt";
 
 // 将二进制字符串“0000000100000010” 按 8bit 一组合并转化的字符数组
 uint8_t *Link11MsgUtil::StrToCharArray(std::string &str_data, int char_length) {

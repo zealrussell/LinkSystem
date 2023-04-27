@@ -3,7 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-LinkSystem/build/
+build/
+Test/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -405,5 +407,3 @@ FodyWeavers.xsd
 *.app
 main
 server
-Test/
-data/

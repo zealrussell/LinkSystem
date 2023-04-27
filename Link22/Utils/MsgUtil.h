@@ -56,7 +56,7 @@ template<size_t N>
 uint8_t *MsgUtil::BitsetToCharArray(const std::bitset<N> *b, int arraySize) {
     int len = N * arraySize;
     if (len % 8 != 0) {
-        printf("The input string length %n is not porperty, 8bit needed", len);
+        printf("The input string length %d is not porperty, 8bit needed", len);
         return nullptr;
     }
     // 1.将bitset转换成字符串

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "hamming.h"
 #include "Link11MsgUtil.h"
+#include <json/Json.h>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ using namespace std;
 class Decode
 {
 public:
-	string CrackMessage(string temp, int &n);
+	yazi::json::Json CrackMessage(string data, string &msg, int &n);
 
 private:
 	string CrackDataFrame(const std::string& msg, int& n);

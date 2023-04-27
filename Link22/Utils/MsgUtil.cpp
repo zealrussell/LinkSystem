@@ -8,7 +8,7 @@
 #include <map>
 #include <algorithm>
 
-const std::string MsgUtil::FILE_NAME = "./data.txt";
+const std::string MsgUtil::FILE_NAME = "./data/link22_data.txt";
 extern std::map<std::string, int> CodetoType;
 extern std::map<std::string, std::string> CodetoName;
 
@@ -143,24 +143,25 @@ void MsgUtil::getTypeFromMessage(const std::string &message, int &n_out, int &m_
     if (message[0] != 0) return;
 
     // std::string n = message.substr(1, 4);
-    int n = getNumFromLinkMsg(message.substr(1, 4));
+    int n = getNumFromLinkMsg(message.substr(1, 3));
     // 标识指示符
     // F0n.m-p
     if (n == 0) {
-        n_out = getNumFromLinkMsg(message.substr(4, 6));
-        m_out = getNumFromLinkMsg(message.substr(6, 9));
-        p_out = getNumFromLinkMsg(message.substr(9, 11));
+        n_out = getNumFromLinkMsg(message.substr(4, 2));
+        m_out = getNumFromLinkMsg(message.substr(6, 3));
+        p_out = getNumFromLinkMsg(message.substr(9, 2));
         // Fn-p
     } else if (n == 1 || n == 4 || n == 5) {
         n_out = n;
         m_out = -1;
-        p_out = getNumFromLinkMsg(message.substr(4, 5));
+        p_out = getNumFromLinkMsg(message.substr(4, 1));
     // Fn
-    } else if (n == 2 || n == 3 || n == 6) {
-       
+    } else if (n == 2 || n == 3 || n == 6 || n == 7) {
         n_out = n;
+        m_out = -1;
+        p_out = -1;
     } else return;
-
+    printf("GETTYPE:: Type are n:%d, m:%d, p:%d \n", n_out, m_out, p_out);
 }
 
 int MsgUtil::getTypeByNPM(int n, int p, int m)
@@ -176,7 +177,7 @@ int MsgUtil::getTypeByNPM(int n, int p, int m)
 
 // 从link22比特报文中获取n m p的十进制值
 int MsgUtil::getNumFromLinkMsg(std::string msg) {
-    reverse(msg.begin(), msg.end());
+    // reverse(msg.begin(), msg.end());
     return std::stoi(msg, NULL, 2);
 }
 // 文件操作******************************************* 

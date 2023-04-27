@@ -48,7 +48,7 @@ class ConstructCenter {
         bool beginDeCrc(const uint8_t* crcCode, const uint8_t *data, int arrayNum);
         uint8_t *beginDeRs(const uint8_t *rsCode, int arrayNum);
 
-        Json link22Json;
+        Json link22EncodeJson;
         Json link22DecodeJson;
         
         MsgUtil msgUtil;

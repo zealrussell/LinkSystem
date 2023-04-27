@@ -22,7 +22,10 @@ INCLUDE_TEMP = $(shell find ./* -type d)
 INCLUDE = $(patsubst %,-I %, $(INCLUDE_TEMP))
 $(warning INCLUDE is ${INCLUDE})
 
+# 目标文件路径
+OBJ_PATH = ./build
 SRC_SERVER = server.cpp
+# 目标文件名
 OBJ_SERVER = ${SRC_SERVER:%.cpp=%.o}
 EXE_SERVER = server
 

@@ -11,7 +11,7 @@ using namespace yazi::json;
 class Link11Center
 {
 	public:
-		Json encoder_Link11(int type, int n, const std::string& msg);
+		Json encoder_Link11(const std::string& msg, int type, int n);
 		Json decoder_Link11(std::string &msg, int& n);
 
 	private:

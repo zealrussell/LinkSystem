@@ -11,8 +11,8 @@ FnpMessage::FnpMessage() {
 }
 
 FnpMessage::FnpMessage(const std::string &msg, int N, int P) {
-    if (N != 1 && N != 4 && N != 5) return;
-    if (P != 0 && P != 1) return;
+    if (N != 1 || N != 4 || N != 5) return;
+    if (P != 0 || P != 1) return;
     if (msg.length() < 0 || msg.length() > 61) return;
 
     setN(N);

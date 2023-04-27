@@ -5,6 +5,7 @@
 #include <iostream>
 #include "hamming.h"
 #include "Link11MsgUtil.h"
+#include <json/Json.h>
 
 using namespace std;
 
@@ -17,7 +18,7 @@ class Encode
 public:
 	Encode();
 	~Encode();
-	uint8_t* BuildMessage(int type, int n, const string& msg);
+	yazi::json::Json BuildMessage(int type, int n, const string& msg);
 
 
 private:
@@ -28,6 +29,7 @@ private:
 	string BuildEndFrame();
 	int decToBin(int dec);
 
+	Link11MsgUtil msgUtil;
 };
 
 
