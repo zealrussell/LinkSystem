@@ -25,6 +25,15 @@ public:
     void link22_encode(const Request & req, Response & resp);
     void link22_decode(const Request & req, Response & resp);
 
+    void from11to16(const Request & req, Response & resp);
+    void from11to22(const Request & req, Response & resp);
+
+    void from16to11(const Request & req, Response & resp);
+    void from16to22(const Request & req, Response & resp);
+
+    void from22to11(const Request & req, Response & resp);
+    void from22to16(const Request & req, Response & resp);
+
 private:
 
     Link11Center link11Center;

@@ -11,7 +11,7 @@ FnMessage::FnMessage() {
 }
 
 FnMessage::FnMessage(const std::string &msg, int N) {
-    if (N != 2 && N != 3 && N != 6) return;
+    if (N != 2 || N != 3 || N != 6) return;
     if (msg.length() < 0 || msg.length() > 62) return;
 
     setN(N);

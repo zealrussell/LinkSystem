@@ -1,9 +1,10 @@
 #include "Decode.h"
 
-string Decode::CrackMessage(string tmp, int& n)
+yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& n)
 {
-	
-	//cout << tmp << endl;
+	yazi::json::Json link11DecodeJson;
+	link11DecodeJson["linktype"] = "link11";
+	link11DecodeJson["type"] = "decode";
 
 	//解码前导帧
 	string preambleframe = CrackPreambleFrame(tmp);
@@ -22,8 +23,15 @@ string Decode::CrackMessage(string tmp, int& n)
 
 	//将01序列转为消息
 	Link11MsgUtil msgutil;
-	string str = msgutil.BitStrToStr(dataframe);
-	return str;
+	// 结果
+	msg = msgutil.BitStrToStr(dataframe);
+
+	link11DecodeJson["depreambleframe"] = preambleframe;
+	link11DecodeJson["dephaseframe"] = phaseframe;
+	link11DecodeJson["dedataframe"] = dataframe;
+	link11DecodeJson["originstring"] = msg;
+
+	return link11DecodeJson;
 }
 
 //解码数据帧

@@ -23,14 +23,16 @@ uint8_t *ConstructCenter::beginAssemble (const std::bitset<72> &b1, const std::b
     p[0] = b1;
     p[1] = b2;
     Json dataJson;
+    printf("begin assembel\n");
     uint8_t *aesCode = beginAes(p, 2);
     uint8_t *crcCode = beginCrc(aesCode, 18);
     uint8_t *rsCode = beginRs(crcCode, aesCode,18);
     printf("...assembel\n");
+
     dataJson["aes"] = msgUtil.CharArrayToBitStr(aesCode, 16);
     dataJson["crc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
     dataJson["rs"] = msgUtil.CharArrayToBitStr(rsCode, 36);
-    link22Json["data"].append(dataJson);
+    link22EncodeJson["data"].append(dataJson);
 
     delete aesCode;
     delete crcCode;
@@ -226,14 +228,14 @@ Json ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
         printf("No such message type!\n");
         return Json("No such message type!");
     } else {
-        printf("the code name is: %s\n", CodetoName[key]);
+        printf("the code name is: %s\n", CodetoName[key].c_str());
     }
-    link22Json.clear();
+    link22EncodeJson.clear();
 
     // link类型
-    link22Json["linkType"] = "link22"; 
-    link22Json["originMsg"] = msg;
-    link22Json["data"] = Json("json_array");
+    link22EncodeJson["linkType"] = "link22"; 
+    link22EncodeJson["originMsg"] = msg;
+    link22EncodeJson["data"] = Json("json_array");
 
     uint8_t *res = nullptr;
     int type = msgUtil.getTypeByNPM(n, p, m);
@@ -260,14 +262,16 @@ Json ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
         printf("Fn message will be construct....\n");
         res = beginConstruct(msg, 3, n);
     }
-    // link22Json["encodedData"] = msgUtil.CharArrayToBitStr(res,);
-    return link22Json;
+
+    link22EncodeJson["encodedData"] = msgUtil.CharArrayToBitStr(res, 36);
+
+    return link22EncodeJson;
 }
 
 // 填充，生成F系列消息
 uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n, int p, int m) {
     // 1. 将输入的string消息转换成01字符串
-    printf("\n The message needed to be constructed is: %s\n",msg.c_str());
+    printf("\nThe message needed to be constructed is: %s\n",msg.c_str());
     std::string str = msgUtil.StrToBitStr(msg);
     printf("The %lu bit binary string before compeleted are: %s\n",str.length(),str.c_str());
     // 2. 计算切分的报文数
@@ -286,6 +290,7 @@ uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n
     // 3. 分段填充
     int remainLen = str.length();
     int i = 0;
+    printf("total length: %d\n", remainLen);
     // 3.1 处理整的部分
     while(remainLen > DMSGLEN) {
         uint8_t *data = nullptr;
@@ -362,12 +367,13 @@ Json ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
     // printf("请输入码元个数：");
     // std::cin >> arrayNum;
     printf("Origin %d data: ", symbolNum);
-    print(data, 36 * symbolNum);
+    std::string orgindata = msgUtil.CharArrayToBitStr(data, 36 * symbolNum);
+    printf("%s", orgindata);
 
     link22DecodeJson.clear();
     link22DecodeJson["linkType"] = "link22";
     link22DecodeJson["type"] = "decode";
-    link22DecodeJson["originData"] = msgUtil.CharArrayToBitStr(data, 36 * symbolNum);
+    link22DecodeJson["originData"] = orgindata;
     link22DecodeJson["data"] = Json("json_array");
 
     std::string message;
@@ -388,7 +394,7 @@ Json ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
 
             if (flag) {
                 msgUtil.getTypeFromMessage(str.substr(0, 72),n, m, p);
-                flag != flag;
+                flag = !flag;
             }
         }
     }

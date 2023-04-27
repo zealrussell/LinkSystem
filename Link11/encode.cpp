@@ -4,10 +4,13 @@
 
 using namespace std;
 
-uint8_t* Encode::BuildMessage(int type, int n, const string& msg)
+yazi::json::Json Encode::BuildMessage(int type, int n, const string& msg)
 {
+	yazi::json::Json link11EncodeJson;
+	link11EncodeJson["linktype"] = "link11";
+	link11EncodeJson["type"] = "encode";
 
-	//����ǰ��֡
+	//编码前导帧
 	string preambleframe = BuildPreambleFrame();
 	//������λ�ο�֡
 	string phaseframe = BuildPhaseFrame();
@@ -18,12 +21,19 @@ uint8_t* Encode::BuildMessage(int type, int n, const string& msg)
 	//��������֡
 	string endframe = BuildEndFrame();
 
-	//���
+	//结果
 	string result = preambleframe + phaseframe + startframe + dataframe + endframe;
-	//cout << msg << endl;
-	//cout << (uint8_t*)msg.c_str() << endl;
 	
-	return (uint8_t*)result.c_str();
+	link11EncodeJson["preambleframe"] = preambleframe;
+	link11EncodeJson["phaseframe"] = phaseframe;
+	link11EncodeJson["startframe"] = startframe;
+	link11EncodeJson["dataframe"] = dataframe;
+	link11EncodeJson["endframe"] = endframe;
+	link11EncodeJson["result"] = result;
+
+	cout <<"link11 after encode::" << msg << endl;
+	msgUtil.saveToFile(Link11MsgUtil::FILE_NAME, (uint8_t *)msg.c_str(), 10);
+	return link11EncodeJson;
 }
 
 //��������֡

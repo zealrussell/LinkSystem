@@ -7,6 +7,7 @@
 #include <iostream>
 #include <bitset>
 
+// F0n.m-p
 class F0nMessage {
     public:
         F0nMessage();
