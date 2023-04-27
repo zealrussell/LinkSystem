@@ -61,7 +61,7 @@ bitset<16> CrcUtil::crc16(uint16 data[], int len) {
     uint CRC_SIZE16 = 16;
     uint remainder = 0;
     int nremainder = 0;
-    int j,k;
+    size_t j,k;
     uint bit,lb;
     uint fb,cb;
     for (int i = 0; i < len; i++) {

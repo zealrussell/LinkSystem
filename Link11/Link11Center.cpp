@@ -11,6 +11,6 @@ Json Link11Center::decoder_Link11(std::string &msg, int& n)
 	std::string dataStr;
 	msgUtil.getDataFromFile(Link11MsgUtil::FILE_NAME, dataStr);
 	Json decodeJson = decode.CrackMessage(dataStr, msg, n);
-	printf("½ÓÊÕµ½±àºÅM.%dµÄ±¨ÎÄ, ½âÂëºóÏûÏ¢Îª: %s", n, msg);
+	printf("æ¥æ”¶åˆ°ç¼–å·M.%dçš„æŠ¥æ–‡, è§£ç åæ¶ˆæ¯ä¸º: %s", n, msg);
 	return decodeJson;
 }
