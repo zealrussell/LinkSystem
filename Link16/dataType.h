@@ -5,7 +5,8 @@ using namespace std;
 
 typedef bitset<5>	symbol;		//5bit = 1Symbol, Attention: sizeof(symbol) = 4
 
-constexpr auto LINK16_FILEPATH = R"(./data/link16_data.txt)";
+constexpr auto LINK16_LOG_FILEPATH = R"(./data/link16_log.txt)";
+constexpr auto LINK16_DATA_FILEPATH = R"(./data/link16_data.txt)";
 constexpr auto PLANES_FILEPATH = R"(./data/result.json)";
 
 const unsigned int BLOCK_BYTES_LENGTH = 16 * sizeof(unsigned char);

@@ -1,8 +1,7 @@
+#pragma once
 #include "tools.h"
 #include "global.h"
-
 #include "STDPMsg.h"
-#include "interface.h"
 #include <json/Json.h>
 
 class Link16Center

@@ -48,12 +48,12 @@ void HeaderWord::show()
 	std::cout << "\tPR\t\t=\t" << m_PR << std::endl;
 	std::cout << "\tSTN\t\t=\t" << m_STN << std::endl;
 	std::cout << "\tSDU\t\t=\t" << m_SDU << std::endl;
-	Tools::save_log("======Message header generated======");
-	Tools::save_log("HeaderWord:");
-	Tools::save_log("\ttype\t=\t" + m_type.to_string());
-	Tools::save_log("\tPR\t\t=\t" + m_PR.to_string());
-	Tools::save_log("\tSTN\t\t=\t" + m_STN.to_string());
-	Tools::save_log("\tSDU\t\t=\t" + m_SDU.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "======Message header generated======");
+	Tools::save_msg(LINK16_LOG_FILEPATH, "HeaderWord:");
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\ttype\t=\t" + m_type.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tPR\t\t=\t" + m_PR.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tSTN\t\t=\t" + m_STN.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tSDU\t\t=\t" + m_SDU.to_string());
 }
 
 void HeaderWord::assembleJson(Json &json)

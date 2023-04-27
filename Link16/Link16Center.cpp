@@ -18,14 +18,14 @@ yazi::json::Json Link16Center::encoder_Link16(const string &inputs, int32_t n, i
 		return "-2";
 	}
 
-	Tools::save_log("The message type sent is:" + g_JType[type]);
+	Tools::save_msg(LINK16_LOG_FILEPATH, "The message type sent is:" + g_JType[type]);
 	std::cout << "The message type sent is:" << g_JType[type] << std::endl;
 
 	srand((unsigned)time(NULL));
 	string bit_data = Tools::StrToBitStr(inputs);
-	Tools::save_log("raw_data = " + inputs);
+	Tools::save_msg(LINK16_LOG_FILEPATH, "raw_data = " + inputs);
 	std::cout << "raw_data = " << inputs << std::endl;
-	Tools::save_log("bit_data = " + bit_data);
+	Tools::save_msg(LINK16_LOG_FILEPATH, "bit_data = " + bit_data);
 	std::cout << "bit_data = " << bit_data << std::endl;
 
 	// Get system time
@@ -118,7 +118,7 @@ yazi::json::Json Link16Center::decoder_Link16(string &raw_data, int32_t &n, int3
 {
 	Json link16DecodeJson;
 	// Reading data from a file.
-	string RT_bit_data = Tools::read_msg();
+	string RT_bit_data = Tools::read_msg(LINK16_DATA_FILEPATH);
 	string bit_msg;
 	STDPMsg stdp_msg;
 

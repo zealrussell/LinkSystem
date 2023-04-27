@@ -28,7 +28,7 @@
 namespace Tools
 {
 	// encode tools
-	inline void save_log(const string &log);
+	inline void save_msg(const string &filepath, const string &msg);
 	inline bool deleteFile();
 	inline string generateBIN(int length);
 	inline vector<string> stringSplit(const string &str, char delim);
@@ -47,7 +47,7 @@ namespace Tools
 							  ExtendWord &eword, ContinueWord &cword);
 
 	// decode tools
-	inline string read_msg();
+	inline string read_msg(const string &filepath);
 	inline string getGroup(string &bit_data);
 	inline void StrToSymbol(symbol *stdp, size_t length, string &message);
 	inline string decode_weave(string &raw_msg);
@@ -65,17 +65,17 @@ namespace Tools
 
 namespace Tools
 {
-	void save_log(const string &log)
+	void save_msg(const string &filepath, const string &msg)
 	{
-		ofstream fout(LINK16_FILEPATH, ios_base::app);
+		ofstream fout(filepath, ios_base::app);
 		if (fout.is_open() == false)
 		{
-			std::cout << "Open file " << LINK16_FILEPATH << " Failed." << std::endl;
+			std::cout << "Open file " << filepath << " Failed." << std::endl;
 			return;
 		}
 
 		// Write the logs to be sent.
-		fout << log << std::endl;
+		fout << msg << std::endl;
 		fout.close();
 		return;
 	}
@@ -83,9 +83,9 @@ namespace Tools
 	// Determine if the file exists and delete it if it exists.
 	bool deleteFile()
 	{
-		if (access(LINK16_FILEPATH, F_OK) == 0)
+		if (access(LINK16_LOG_FILEPATH, F_OK) == 0)
 		{
-			if (remove(LINK16_FILEPATH) == 0)
+			if (remove(LINK16_LOG_FILEPATH) == 0)
 			{
 				std::cout << "File successfully deleted." << std::endl;
 				return true;
@@ -299,11 +299,12 @@ namespace Tools
 			}
 		}
 		res += RS_cword[30].to_string();
-		save_log("======The interweave STDP message is as follows:======");
+		save_msg(LINK16_LOG_FILEPATH, "======The interweave STDP message is as follows:======");
 		std::cout << "======The interweave STDP message is as follows:======\n";
-		save_log(res);
+		save_msg(LINK16_LOG_FILEPATH, res);
+		save_msg(LINK16_DATA_FILEPATH, res);
 		std::cout << res << std::endl;
-		save_log("A STDP message has been successfully sent.");
+		save_msg(LINK16_LOG_FILEPATH, "A STDP message has been successfully sent.");
 		std::cout << "A STDP message has been successfully sent." << std::endl;
 
 		// Release resources.
@@ -324,14 +325,14 @@ namespace Tools
 					   ExtendWord &eword, ContinueWord &cword)
 	{
 		// Perform parity check, 70bit -> 75bit.
-		save_log("======Starting parity check======");
+		save_msg(LINK16_LOG_FILEPATH, "======Starting parity check======");
 		std::cout << "======"
 				  << "Starting parity check"
 				  << "======" << std::endl;
 		Tools::BIP(hword, iword, eword, cword);
 
 		// Message encryption.
-		save_log("======Starting AES encryption======");
+		save_msg(LINK16_LOG_FILEPATH, "======Starting AES encryption======");
 		std::cout << "======"
 				  << "Starting AES encryption"
 				  << "======" << std::endl;
@@ -339,56 +340,58 @@ namespace Tools
 
 		// Symbol conversion followed by RS encoding.
 		hword.to_symbol();
-		save_log("======HeaderWord executes RS error correction encoding. 7Symbol --> 16Symbol======");
+		save_msg(LINK16_LOG_FILEPATH, "======HeaderWord executes RS error correction encoding. 7Symbol --> 16Symbol======");
 		std::cout << "======"
 				  << "HeaderWord executes RS error correction encoding. 7Symbol --> 16Symbol"
 				  << "======" << std::endl;
 		hword.RS_handler();
 
 		iword.to_symbol();
-		save_log("======InitialWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
+		save_msg(LINK16_LOG_FILEPATH, "======InitialWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "InitialWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		iword.RS_handler();
 
 		eword.to_symbol();
-		save_log("======ExtendWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
+		save_msg(LINK16_LOG_FILEPATH, "======ExtendWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "ExtendWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		eword.RS_handler();
 
 		cword.to_symbol();
-		save_log("======ContinueWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
+		save_msg(LINK16_LOG_FILEPATH, "======ContinueWord executes RS error correction encoding. 15Symbol --> 31Symbol======");
 		std::cout << "======"
 				  << "ContinueWord executes RS error correction encoding. 15Symbol --> 31Symbol"
 				  << "======" << std::endl;
 		cword.RS_handler();
 
 		// Interleave and send.
-		save_log("======Start performing character interleaving======");
+		save_msg(LINK16_LOG_FILEPATH, "======Start performing character interleaving======");
 		std::cout << "======"
 				  << "Start performing character interleaving"
 				  << "======" << std::endl;
 		return Tools::weave(hword, iword, eword, cword);
 	}
 
-	string read_msg()
+	string read_msg(const string &filepath)
 	{
 		ifstream fin;
-		fin.open(LINK16_FILEPATH, ios::in);
+		fin.open(filepath, ios::in);
 		if (fin.is_open() == false)
 		{
-			std::cout << "Open file" << LINK16_FILEPATH << "Failed." << std::endl;
+			std::cout << "Open file" << filepath << "Failed." << std::endl;
 			return "";
 		}
 		// Read one line at a time.
 		string buffer;
+		string line;
 		std::cout << "The data read from the txt document is as follows:" << std::endl;
-		while (fin >> buffer)
+		while (fin >> line)
 		{
-			std::cout << buffer << std::endl;
+			buffer += line;
+			std::cout << line << std::endl;
 		}
 		fin.close();
 		return buffer;

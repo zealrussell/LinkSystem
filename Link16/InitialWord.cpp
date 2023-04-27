@@ -95,14 +95,14 @@ void InitialWord::show()
 	std::cout << "\tlength\t\t=\t" << m_length << std::endl;
 	std::cout << "\tmessage\t\t=\t" << m_message << std::endl;
 	std::cout << "\tBIP\t\t=\t" << m_BIP << std::endl;
-	Tools::save_log("======InitialWord has been filled in======");
-	Tools::save_log("initial_word:");
-	Tools::save_log("\tformat\t\t=\t" + m_format.to_string());
-	Tools::save_log("\tsignal\t\t=\t" + m_signal.to_string());
-	Tools::save_log("\tsub_signal\t=\t" + m_sub_signal.to_string());
-	Tools::save_log("\tlength\t\t=\t" + m_length.to_string());
-	Tools::save_log("\tmessage\t\t=\t" + m_message.to_string());
-	Tools::save_log("\tBIP\t\t\t=\t" + m_BIP.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "======InitialWord has been filled in======");
+	Tools::save_msg(LINK16_LOG_FILEPATH, "initial_word:");
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tformat\t\t=\t" + m_format.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tsignal\t\t=\t" + m_signal.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tsub_signal\t=\t" + m_sub_signal.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tlength\t\t=\t" + m_length.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tmessage\t\t=\t" + m_message.to_string());
+	Tools::save_msg(LINK16_LOG_FILEPATH, "\tBIP\t\t\t=\t" + m_BIP.to_string());
 }
 
 void InitialWord::assembleJson(Json &json)
