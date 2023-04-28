@@ -50,6 +50,14 @@ void STDPMsg::setContinueWord(string &bit_data)
 	m_cword->rewrite(bit_data);
 }
 
+void STDPMsg::assembleJson(Json &json)
+{
+	m_headerword->assembleJson(json);
+	m_iword->assembleJson(json);
+	m_eword->assembleJson(json);
+	m_cword->assembleJson(json);
+}
+
 void STDPMsg::clear()
 {
 	m_raw_msg.clear();

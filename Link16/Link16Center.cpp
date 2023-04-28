@@ -13,7 +13,7 @@ yazi::json::Json Link16Center::encoder_Link16(const string &inputs, int32_t n, i
 	}
 
 	// Determine if the file exists and delete it if it exists.
-	if (!Tools::deleteFile())
+	if (!Tools::deleteFile(LINK16_LOG_FILEPATH) || !Tools::deleteFile(LINK16_DATA_FILEPATH))
 	{
 		return "-2";
 	}
@@ -116,12 +116,25 @@ yazi::json::Json Link16Center::encoder_Link16(const string &inputs, int32_t n, i
 
 yazi::json::Json Link16Center::decoder_Link16(string &raw_data, int32_t &n, int32_t &m)
 {
-	Json link16DecodeJson;
 	// Reading data from a file.
 	string RT_bit_data = Tools::read_msg(LINK16_DATA_FILEPATH);
 	string bit_msg;
 	STDPMsg stdp_msg;
 
+	// Get system time
+	time_t timep;
+
+	// Json to send
+	Json json_res;
+	json_res["linkType"] = "link16";
+	json_res["operation"] = "decode";
+	json_res["originMsg"] = 0;
+	json_res["headerWord"] = 0;
+	json_res["initialWord"] = Json("json_array");
+	json_res["extendWord"] = Json("json_array");
+	json_res["continueWord"] = Json("json_array");
+	json_res["decryptedMsg"] = 0;
+	json_res["dataTime"] = 0;
 	while (RT_bit_data.length() != 0)
 	{
 		// Intercept a set of messages.
@@ -170,10 +183,17 @@ yazi::json::Json Link16Center::decoder_Link16(string &raw_data, int32_t &n, int3
 		// Encapsulate ContinueWord.
 		string cword_str = bit_data.substr(0, 75);
 		stdp_msg.setContinueWord(cword_str);
-		// Retrieve data from ontinueWord.
+		// Retrieve data from ContinueWord.
 		bit_msg += stdp_msg.getContinueWord()->getData();
+		// Assemble Json
+		stdp_msg.assembleJson(json_res);
 	}
 	stdp_msg.setBitMsg(bit_msg);
 	raw_data = bit_msg;
-	return link16DecodeJson;
+
+	json_res["originMsg"] = Tools::BitStrTostr(raw_data);
+	json_res["decryptedMsg"] = raw_data;
+	time(&timep);
+	json_res["dataTime"] = ctime(&timep);
+	return json_res;
 }

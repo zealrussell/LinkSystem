@@ -43,5 +43,6 @@ public:
 	void setInitialWord(string &bit_data);
 	void setExtendWord(string &bit_data);
 	void setContinueWord(string &bit_data);
+	void assembleJson(Json &json);
 	void clear();
 };

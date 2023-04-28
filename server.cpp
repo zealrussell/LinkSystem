@@ -6,32 +6,10 @@ using namespace yazi::web;
 
 #include <app/controllers.h>
 
-void hello(const Request & req, Response & resp)
-{
-    string name = req.get("name");
-    string age = req.get("age");
-    string host = req.user_host();
-    resp.html("hello, " + name + "," + age + "," + host);
-}
-
-void reply(const Request & req, Response & resp)
-{
-    string name = req.post("name");
-    int age = req.post("age");
-    
-    Json json;
-    json["name"] = name;
-    json["age"] = age;
-    resp.json(json.str());
-}
-
 int main()
 {
-    Server * server = Singleton<Server>::instance();
+    Server *server = Singleton<Server>::instance();
     server->listen("", 9023);
-    server->bind("/hello", hello);
-    server->bind("/reply", reply);
-    //server->bind("/22encode", );
     server->start();
     return 0;
 }

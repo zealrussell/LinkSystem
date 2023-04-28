@@ -29,7 +29,7 @@ namespace Tools
 {
 	// encode tools
 	inline void save_msg(const string &filepath, const string &msg);
-	inline bool deleteFile();
+	inline bool deleteFile(const string &filepath);
 	inline string generateBIN(int length);
 	inline vector<string> stringSplit(const string &str, char delim);
 	template <class Type>
@@ -81,18 +81,18 @@ namespace Tools
 	}
 
 	// Determine if the file exists and delete it if it exists.
-	bool deleteFile()
+	bool deleteFile(const string &filepath)
 	{
-		if (access(LINK16_LOG_FILEPATH, F_OK) == 0)
+		if (access(filepath.c_str(), F_OK) == 0)
 		{
-			if (remove(LINK16_LOG_FILEPATH) == 0)
+			if (remove(filepath.c_str()) == 0)
 			{
-				std::cout << "File successfully deleted." << std::endl;
+				std::cout << "File" << filepath << "successfully deleted." << std::endl;
 				return true;
 			}
 			else
 			{
-				std::cout << "File failed deleted." << std::endl;
+				std::cout << "File" << filepath << "failed deleted." << std::endl;
 				return false;
 			}
 		}
@@ -390,7 +390,10 @@ namespace Tools
 		std::cout << "The data read from the txt document is as follows:" << std::endl;
 		while (fin >> line)
 		{
-			buffer += line;
+			if (line.compare("") != 0 && line.compare("\n") != 0)
+			{
+				buffer += line;
+			}
 			std::cout << line << std::endl;
 		}
 		fin.close();
@@ -450,6 +453,7 @@ namespace Tools
 		}
 		delete[] matrix;
 		matrix = nullptr;
+		std::cout << "Weave decoding successful." << std::endl;
 		return res;
 	}
 
@@ -468,11 +472,11 @@ namespace Tools
 		string hword_data(data_31_15, 0x00);
 		if (!decode_RS(str_hword, hword_data))
 		{
-			std::cout << "RS decoding successful." << std::endl;
+			std::cout << "RS_16_7 decoding successful." << std::endl;
 		}
 		else
 		{
-			std::cout << "RS decoding failed." << std::endl;
+			std::cout << "RS_16_7 decoding failed." << std::endl;
 		}
 		hword_data.erase(data_16_7, 8);
 		return hword_data;
@@ -489,11 +493,11 @@ namespace Tools
 		string word_data(data_31_15, 0x00);
 		if (!decode_RS(str_word, word_data))
 		{
-			std::cout << "RS decoding successful." << std::endl;
+			std::cout << "RS_31_15 decoding successful." << std::endl;
 		}
 		else
 		{
-			std::cout << "RS decoding failed." << std::endl;
+			std::cout << "RS_31_15 decoding failed." << std::endl;
 		}
 		return word_data;
 	}
