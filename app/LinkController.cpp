@@ -22,8 +22,9 @@ REGISTER_CLASS_METHOD(LinkController, from22to16, void, const Request &, Respons
 
 void yazi::app::LinkController::link11_encode(const Request &req, Response &resp)
 {
-	std::string msg;
-	int n = 0;
+	std::string msg = req.get("msg");
+	int n = std::stoi(req.get("n"));
+
 	Json link11Json = link11Center.encoder_Link11(msg, 1, n);
 	return resp.json(link11Json.str());
 }
@@ -38,8 +39,10 @@ void yazi::app::LinkController::link11_decode(const Request &req, Response &resp
 
 void yazi::app::LinkController::link16_encode(const Request &req, Response &resp)
 {
-	int n = 0, m = 0;
-	std::string msg;
+	int n = std::stoi(req.get("n"));
+	int m = std::stoi(req.get("m"));
+	std::string msg = req.get("msg");;
+	
 	Json link16Json = link16Center.encoder_Link16(msg, n, m);
 	return resp.json(link16Json.str());
 }
@@ -54,16 +57,20 @@ void yazi::app::LinkController::link16_decode(const Request &req, Response &resp
 
 void yazi::app::LinkController::link22_encode(const Request &req, Response &resp)
 {
-	int n = 1, m = 0, p = 0;
-	// std::string msg = "x=10.0;y=4.5;v=20.3";
+	int n = std::stoi(req.get("n"));
+	int m = std::stoi(req.get("m"));
+	int p = std::stoi(req.get("p"));
+	std::string msg = req.get("msg");
+	
 	Json link22Json = link22Center.encoder_Link22("enemy coming", n, m, p);
 	return resp.json(link22Json.str());
 }
 
 void yazi::app::LinkController::link22_decode(const Request &req, Response &resp)
 {
-	int n, m, p = 0;
+	int n, m, p;
 	std::string msg;
+
 	Json link22Json = link22Center.decoder_Link22(msg, n, m, p);
 	return resp.json(link22Json.str());
 }
@@ -78,8 +85,8 @@ void yazi::app::LinkController::from11to16(const Request &req, Response &resp)
 	Json decodeJson;
 
 	//TODO:添加默认值
-	int n_16, m_16;
-	std::string msg_16;
+	int n_16 = -1, m_16 = -1;
+	std::string msg_16 = "";
 	Json encodeJson;
 
 	Json resultJson;
@@ -120,7 +127,7 @@ void yazi::app::LinkController::from16to11(const Request &req, Response &resp)
 	Json decodeJson;
 	
 	//TODO:添加默认值
-	int n_11;
+	int n_11 = -1;
 	std::string msg_11;
 	Json encodeJson;
 
@@ -161,8 +168,8 @@ void yazi::app::LinkController::from11to22(const Request &req, Response &resp)
 	Json decodeJson;
 
 	//TODO:添加默认值
-	int n_22, m_22, p_22;
-	std::string msg_22;
+	int n_22 = -1, m_22 = -1, p_22 = -1;
+	std::string msg_22 = "";
 	Json encodeJson;
 
 	Json resultJson;
@@ -319,8 +326,3 @@ void yazi::app::LinkController::from22to16(const Request &req, Response &resp)
 	resultJson["decode"] = decodeJson;
 	return resp.json(resultJson.str());
 }
-
-// void getDataFrom() {
-//     // 1. 解析json
-//     // 2. 获取数据
-// }

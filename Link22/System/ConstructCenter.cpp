@@ -368,7 +368,7 @@ Json ConstructCenter::crackMessage(const uint8_t *data, int symbolNum, std::stri
     // std::cin >> arrayNum;
     printf("Origin %d data: ", symbolNum);
     std::string orgindata = msgUtil.CharArrayToBitStr(data, 36 * symbolNum);
-    printf("%s", orgindata);
+    printf("%s", orgindata.c_str());
 
     link22DecodeJson.clear();
     link22DecodeJson["linkType"] = "link22";

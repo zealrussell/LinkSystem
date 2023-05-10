@@ -101,7 +101,7 @@ const char* check_error(const char* ham_code)
 	int error_index = 0;
 	char *true_ham_code = (char *)malloc(sizeof(char)*MAX_HAM_CODE_LEN);
 	strcpy(true_ham_code,ham_code);
-	if( error_index = is_error(ham_code) ){
+	if((error_index = is_error(ham_code)) ){
 		true_ham_code[error_index-1] == '0' ? true_ham_code[error_index-1] = '1' : true_ham_code[error_index-1] = '0';
 		return true_ham_code;
 	}

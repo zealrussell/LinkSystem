@@ -33,7 +33,7 @@ bitset<9> CrcUtil::crc9(uint16 data[], int len) {
             fb = lb ^ bit;
             nremainder = fb;
             for (k = 1; k < CRC_SIZE; k++) {
-                cb = (remainder & (1 << (k - 1))) >> k - 1;
+                cb = ((remainder & (1 << (k - 1))) >> k) - 1;
                 if (PATTERN9 & (1 << k)) {
                     nremainder |= (cb ^ fb) << k;
                 } else {
@@ -72,7 +72,7 @@ bitset<16> CrcUtil::crc16(uint16 data[], int len) {
             fb = lb ^ bit;
             nremainder = fb;
             for (k = 1; k < CRC_SIZE16; k++) {
-                cb = (remainder & (1 << (k - 1))) >> k - 1;
+                cb = ((remainder & (1 << (k - 1))) >> k) - 1;
                 if (PATTERN16 & (1 << k)) {
                     nremainder |= (cb ^ fb) << k;
                 } else {

@@ -12,6 +12,7 @@ namespace yazi
         {
         public:
             void planes(const Request &req, Response &resp);
+            void getData(const Request &req, Response &resp);
         };
     }
 }

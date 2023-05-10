@@ -19,7 +19,7 @@ FnpMessage::FnpMessage(const std::string &msg, int N, int P) {
     setP(P);
     setLength(msg.length());
     setMessage(msg);
-    printf("F%d-%d message has been constructed: %s\n",N, P, getBitsetData());
+    printf("F%d-%d message has been constructed: %s\n",N, P, getBitsetData().to_string().c_str());
 }
 
 std::string FnpMessage::getStrData() {

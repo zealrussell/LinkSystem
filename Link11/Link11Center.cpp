@@ -11,6 +11,6 @@ Json Link11Center::decoder_Link11(std::string &msg, int& n)
 	std::string dataStr;
 	msgUtil.getDataFromFile(Link11MsgUtil::FILE_NAME, dataStr);
 	Json decodeJson = decode.CrackMessage(dataStr, msg, n);
-	printf("接收到编号M.%d的报文, 解码后消息为: %s", n, msg);
+	printf("接收到编号M.%d的报文, 解码后消息为: %s", n, msg.c_str());
 	return decodeJson;
 }
