@@ -11,7 +11,7 @@ namespace yazi
         class PlaneController : public Controller
         {
         public:
-            void planes(const Request &req, Response &resp);
+            void getPlaneData(const Request &req, Response &resp);
             void getData(const Request &req, Response &resp);
         };
     }

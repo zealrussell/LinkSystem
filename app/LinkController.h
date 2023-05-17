@@ -37,6 +37,8 @@ namespace yazi
             Link11Center link11Center;
             Link16Center link16Center;
             Link22Center link22Center;
+
+            void preparePlaneData();
         };
 
     }

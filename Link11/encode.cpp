@@ -12,13 +12,13 @@ yazi::json::Json Encode::BuildMessage(int type, int n, const string& msg)
 
 	//编码前导帧
 	string preambleframe = BuildPreambleFrame();
-	//������λ�ο�֡
+	//编码相位参考帧
 	string phaseframe = BuildPhaseFrame();
-	//������ʼ֡
+	//编码起始帧
 	string startframe = BuildStartFrame();
-	//��������֡
+	//编码数据帧
 	string dataframe = BuildDataFrame(type, n, msg);
-	//��������֡
+	//编码结束帧
 	string endframe = BuildEndFrame();
 
 	//结果
@@ -36,16 +36,16 @@ yazi::json::Json Encode::BuildMessage(int type, int n, const string& msg)
 	return link11EncodeJson;
 }
 
-//��������֡
+//构建数据帧
 string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 {
 	string tmp;
 
-	//����ϢתΪ01����
+	//将消息转为01序列
 	Link11MsgUtil msgutil;
 	string bitstr = msgutil.StrToBitStr(msg);
 
-	//����4λ���ı��
+	//构建4位报文编号
 	string num = to_string(decToBin(n));
 	//cout << num << endl;
 	for (size_t i = 0; i < 4 - num.length(); i++) {
@@ -53,36 +53,37 @@ string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 	}
 	tmp += num;
 	//cout << tmp << endl;
-	
-	//��Ϣ��24bit���֣�ÿֻ֡��24bit��Ϣ,ͬʱ��ɺ��������Ȼ��ϲ�
-	//��һ֡ǰ4bit�ѱ����ı��ռ��
-	int len = bitstr.length();
-	int end = 20;//��ʼĩβ
 
-	//�и�20bit�����ݺͱ��ı�ŵ�4bit��ɵ�һ֡
+	tmp += to_string(type);
+	
+	//消息按24bit划分，每帧只有24bit消息,同时完成汉明码加密然后合并
+	//第一帧前4bit已被报文编号占据
+	int len = bitstr.length();
+	int end = 19;	//初始末尾
+
+	//切割19bit的数据和报文编号的4bit组成第一帧
 	string s;
-	if (20 > len)//������һ���ָ������ָ�ȣ���0
+	if (19 > len) //针对最后一个分割串，不足分割长度，补0
 	{
-		s = bitstr.substr(0, len);//���һ���ַ�����ԭʼ����
-		s.append(end - len, '0');//����numλ�ģ���0
+		s = bitstr.substr(0, len);	//最后一个字符串的原始部分
+		s.append(end - len, '0');	//不足num位的，补0
 		tmp = encode((tmp + s).c_str());
 	}
 	else {
-		s = bitstr.substr(0, end);//��0��ʼ���ָ�20λ�ַ���
+		s = bitstr.substr(0, end);	//从0开始，分割19位字符串
 		end = end + DataLen;
 		tmp = encode((tmp + s).c_str());
 
-		//��24һ���и�֮������
-		for (int start = 20; start < len;)
+		//按24一组切割之后数据
+		for (int start = 19; start < len;)
 		{
-			if (end > len)//������һ���ָ������ָ�ȣ���0
+			if (end > len)//针对最后一个分割串，不足分割长度，补0
 			{
-				s = bitstr.substr(start, len - start);//���һ���ַ�����ԭʼ����
-				s.append(end - len, '0');//����numλ�ģ���0
-				tmp += encode(s.c_str());
+				s = bitstr.substr(start, len - start);	//最后一个字符串的原始部分
+				s.append(end - len, '0');	//不足num位补0
 				break;
 			}
-			s = bitstr.substr(start, DataLen);//��0��ʼ���ָ�24λ�ַ���
+			s = bitstr.substr(start, DataLen);	//从0开始，分割24位字符串
 			start = end;
 			end = end + DataLen;
 			tmp += encode(s.c_str());
@@ -92,7 +93,7 @@ string Encode::BuildDataFrame(int type, int n, const std::string& msg)
 	return tmp;
 }
 
-//����ǰ��֡
+//构建前导帧
 string Encode::BuildPreambleFrame()
 {
 	string tmp;
@@ -103,7 +104,7 @@ string Encode::BuildPreambleFrame()
 	return tmp;
 }
 
-//������λ֡
+//构建相位帧
 string Encode::BuildPhaseFrame()
 {
 	string tmp;

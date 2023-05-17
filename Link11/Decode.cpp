@@ -1,6 +1,6 @@
 #include "Decode.h"
 
-yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& n)
+yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& type, int& n)
 {
 	yazi::json::Json link11DecodeJson;
 	link11DecodeJson["linktype"] = "link11";
@@ -17,7 +17,7 @@ yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& n)
 	//	<< phaseframe.length() << endl;
 	
 	//解码数据帧
-	string dataframe = CrackDataFrame(tmp,n);
+	string dataframe = CrackDataFrame(tmp, type, n);
 	//cout << dataframe << endl
 	//	<< dataframe.length() << endl;
 
@@ -35,7 +35,7 @@ yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& n)
 }
 
 //解码数据帧
-string Decode::CrackDataFrame(const std::string& msg, int& n)
+string Decode::CrackDataFrame(const std::string& msg, int& type, int& n)
 {
 	//计算数据帧长度
 	int len = msg.length() - 6 * FrameLen - 4 * 30;
@@ -58,11 +58,15 @@ string Decode::CrackDataFrame(const std::string& msg, int& n)
 	}
 	//前4bit为报文编号
 	string datanum = tmp.substr(0, 4);
+	//第五位为报文类型
+	string typenum = tmp.substr(4, 1);
 	//其后均为数据
-	string data = tmp.substr(4, tmp.length()-8);//截取的长度应为char类型的位长8的整数
+	string data = tmp.substr(5, tmp.length()-8);//截取的长度应为char类型的位长8的整数
 
 	//声明接收报文的编号
 	n = stoi(datanum, 0, 2);
+	//声明接受报文的类型
+	type = stoi(typenum, 0, 2);
 
 	return data;
 }
@@ -111,4 +115,3 @@ string Decode::CrackPhaseFrame(const std::string& msg)
 	}
 	return tmp;
 }
-

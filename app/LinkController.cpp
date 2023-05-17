@@ -1,6 +1,10 @@
 #include <app/LinkController.h>
+#include "./Variable.h"
 
 using namespace yazi::app;
+
+extern UAV uav_data[4];
+extern Json planeJson;
 
 REGISTER_CLASS(LinkController);
 
@@ -22,29 +26,76 @@ REGISTER_CLASS_METHOD(LinkController, from22to16, void, const Request &, Respons
 
 void yazi::app::LinkController::link11_encode(const Request &req, Response &resp)
 {
-	std::string msg = req.get("msg");
+	std::string msg;  // = req.get("msg");
 	int n = std::stoi(req.get("n"));
-
+	int type = 0;
+	// 文本消息
+	if (n == 1223) {
+		type = 1;
+		msg = "文本消息";
+	// 测试消息
+	} else if (n == 11) {
+		type = 0;
+		msg = "link11 test";
+	} else if ( n == 12) {
+		type = 0;
+		msg = "国家";
+	} else if (n == 2) {
+		// 位置报文
+		type = 1;
+		msg = "x=" + std::to_string(uav_data[0].x) 
+				+ ";y=" + std::to_string(uav_data[0].y) 
+				+ ";z=" + std::to_string(uav_data[0].z);
+	} else if (n == 82) {
+		type = 1;
+		msg = "messageType=country";
+	} else {
+		msg = "";
+	}
 	Json link11Json = link11Center.encoder_Link11(msg, 1, n);
-	return resp.json(link11Json.str());
+	resp.json(link11Json.str());
+	return;
 }
 
 void yazi::app::LinkController::link11_decode(const Request &req, Response &resp)
 {
 	int n = 0;
+	int type = 0;
 	std::string msg;
-	Json link11Json = link11Center.decoder_Link11(msg, n);
-	return resp.json(link11Json.str());
+	Json link11Json = link11Center.decoder_Link11(msg, type, n);
+	resp.json(link11Json.str());
+	return;
 }
 
 void yazi::app::LinkController::link16_encode(const Request &req, Response &resp)
 {
+	std::string msg; // = req.get("msg");
 	int n = std::stoi(req.get("n"));
 	int m = std::stoi(req.get("m"));
-	std::string msg = req.get("msg");;
 	
+	if (n == 28 && m == 20) {
+		msg = "This is a text message";
+	} else if (n == 1 && m == 1) {
+		msg = "link16 test";
+	} else if (n == 28 && m == 4) {
+		msg = "messageType=country;country=UK1";
+	} else if (n == 31 && m == 1) {
+		// 秘钥滚动
+		msg = "12554343";
+	} else if (n == 15 && m == 0) {
+		// 威胁告警
+		msg = "warning!!!";
+	} else if (n == 3 && m == 2) {
+		// 空中航迹
+		msg = "x=" + std::to_string(uav_data[0].x) 
+				+ ";y=" + std::to_string(uav_data[0].y) 
+				+ ";z=" + std::to_string(uav_data[0].z);
+	}	else {
+		msg = "";
+	}
 	Json link16Json = link16Center.encoder_Link16(msg, n, m);
-	return resp.json(link16Json.str());
+	resp.json(link16Json.str());
+	return;
 }
 
 void yazi::app::LinkController::link16_decode(const Request &req, Response &resp)
@@ -52,18 +103,36 @@ void yazi::app::LinkController::link16_decode(const Request &req, Response &resp
 	int n = 0, m = 0;
 	std::string msg;
 	Json link16Json = link16Center.decoder_Link16(msg, n, m);
-	return resp.json(link16Json.str());
+	resp.json(link16Json.str());
+	return;
 }
 
 void yazi::app::LinkController::link22_encode(const Request &req, Response &resp)
 {
+	std::string msg; // = req.get("msg");
 	int n = std::stoi(req.get("n"));
 	int m = std::stoi(req.get("m"));
 	int p = std::stoi(req.get("p"));
-	std::string msg = req.get("msg");
-	
-	Json link22Json = link22Center.encoder_Link22("enemy coming", n, m, p);
-	return resp.json(link22Json.str());
+	if (n == 2 && m == -1 && p == -1) {
+		// 空中航迹位置
+		msg = "x=" + std::to_string(uav_data[0].x) 
+				+ ";y=" + std::to_string(uav_data[0].y) 
+				+ ";z=" + std::to_string(uav_data[0].z);
+	} else if (n == 0 && m == 7 && p == 10) {
+		// 秘钥滚动
+		msg = "";
+	} else if (n == 1 && m == 0 && p == 0) {
+		// 敌我识别
+		msg = "enemy conming";
+	} else if (n == 3 && m == 2 && p == -1) {
+		msg = "x=" + std::to_string(uav_data[0].x) 
+				+ ";y=" + std::to_string(uav_data[0].y) 
+				+ ";z=" + std::to_string(uav_data[0].z)
+				+ ";speed=" + std::to_string(uav_data[0].vx);
+	}
+	Json link22Json = link22Center.encoder_Link22(msg, n, m, p);
+	resp.json(link22Json.str());
+	return;
 }
 
 void yazi::app::LinkController::link22_decode(const Request &req, Response &resp)
@@ -72,7 +141,8 @@ void yazi::app::LinkController::link22_decode(const Request &req, Response &resp
 	std::string msg;
 
 	Json link22Json = link22Center.decoder_Link22(msg, n, m, p);
-	return resp.json(link22Json.str());
+	resp.json(link22Json.str());
+	return;
 }
 
 // --------------------------------------- 转换 ---------------------------------------------------------
@@ -81,6 +151,7 @@ void yazi::app::LinkController::link22_decode(const Request &req, Response &resp
 void yazi::app::LinkController::from11to16(const Request &req, Response &resp)
 {
 	int n_11;
+	int type_11;
 	std::string msg_11;
 	Json decodeJson;
 
@@ -91,7 +162,7 @@ void yazi::app::LinkController::from11to16(const Request &req, Response &resp)
 
 	Json resultJson;
 
-	decodeJson = link11Center.decoder_Link11(msg_11, n_11);
+	decodeJson = link11Center.decoder_Link11(msg_11, type_11, n_11);
 	if (n_11 == 1223)
 	{
 		// 1. 直译：m.12.23 文本消息 -> j28.20 文本消息
@@ -108,7 +179,7 @@ void yazi::app::LinkController::from11to16(const Request &req, Response &resp)
 	}
 	else if (n_11 == 12)
 	{
-		// 3. 增译: M。12国家报文 -》 J28。7 英国1
+		// 3. 增译: M.12国家报文 -》 J28。7 英国1
 		n_16 = 28;
 		m_16 = 7;
 		msg_16 = msg_11 + ";country=uk1";
@@ -117,7 +188,8 @@ void yazi::app::LinkController::from11to16(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
 }
 
 void yazi::app::LinkController::from16to11(const Request &req, Response &resp)
@@ -158,12 +230,14 @@ void yazi::app::LinkController::from16to11(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
 }
 
 void yazi::app::LinkController::from11to22(const Request &req, Response &resp)
 {
 	int n_11;
+	int type_11;
 	std::string msg_11;
 	Json decodeJson;
 
@@ -174,7 +248,7 @@ void yazi::app::LinkController::from11to22(const Request &req, Response &resp)
 
 	Json resultJson;
 
-	decodeJson = link11Center.decoder_Link11(msg_11, n_11);
+	decodeJson = link11Center.decoder_Link11(msg_11, type_11, n_11);
 
 	if (n_11 == 2)
 	{
@@ -204,9 +278,11 @@ void yazi::app::LinkController::from11to22(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
 }
 
+//todo:
 void yazi::app::LinkController::from22to11(const Request &req, Response &resp)
 {
 	// link22 消息数据
@@ -236,7 +312,8 @@ void yazi::app::LinkController::from22to11(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
 }
 
 void yazi::app::LinkController::from16to22(const Request &req, Response &resp)
@@ -280,7 +357,8 @@ void yazi::app::LinkController::from16to22(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
 }
 
 void yazi::app::LinkController::from22to16(const Request &req, Response &resp)
@@ -309,10 +387,10 @@ void yazi::app::LinkController::from22to16(const Request &req, Response &resp)
 	{
 		n_16 = 15;
 		m_16 = 0;
-		msg_16 = "warning";
+		msg_16 = "warning!!!";
 	}
 	// case 3：删译
-	else if (n_22 == 5 && m_22 == 0)
+	else if (n_22 == 5 && m_22 == 0 && p_22 == -1)
 	{
 		// F5-0空中航迹的航向和速度 => J3.2空中航迹
 		n_16 = 3;
@@ -324,5 +402,24 @@ void yazi::app::LinkController::from22to16(const Request &req, Response &resp)
 
 	resultJson["encode"] = encodeJson;
 	resultJson["decode"] = decodeJson;
-	return resp.json(resultJson.str());
+	resp.json(resultJson.str());
+	return;
+}
+
+void yazi::app::LinkController::preparePlaneData() {
+	if (planeJson.isNull()) return;
+	for (int i = 0; i < planeJson.size(); i++) {
+		std::string name = "uav" + i;
+		Json uavJson = planeJson.get(name);
+
+		uav_data[i].label = uavJson.get("label").asString();
+
+		uav_data[i].x = uavJson.get("x").asDouble();
+		uav_data[i].y = uavJson.get("y").asDouble();
+		uav_data[i].z = uavJson.get("z").asDouble();
+
+		uav_data[i].vx = uavJson.get("vx").asDouble();
+		uav_data[i].vy = uavJson.get("vy").asDouble();
+		uav_data[i].vz = uavJson.get("vz").asDouble();
+	}
 }

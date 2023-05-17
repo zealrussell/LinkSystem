@@ -12,7 +12,7 @@ class Link11Center
 {
 	public:
 		Json encoder_Link11(const std::string& msg, int type, int n);
-		Json decoder_Link11(std::string &msg, int& n);
+		Json decoder_Link11(std::string &msg,int &type, int& n);
 
 	private:
 		Encode encode;

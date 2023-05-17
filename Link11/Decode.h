@@ -14,10 +14,10 @@ using namespace std;
 class Decode
 {
 public:
-	yazi::json::Json CrackMessage(string data, string &msg, int &n);
+	yazi::json::Json CrackMessage(string data, string &msg, int &type, int &n);
 
 private:
-	string CrackDataFrame(const std::string& msg, int& n);
+	string CrackDataFrame(const std::string& msg, int &type, int& n);
 	string CrackPreambleFrame(const std::string& msg);
 	string CrackPhaseFrame(const std::string& msg);
 };
