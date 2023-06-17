@@ -1,6 +1,6 @@
 #include "Decode.h"
 
-yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& type, int& n)
+yazi::json::Json Decode::CrackMessage(const std::string &tmp, string &msg, int& type, int& n)
 {
 	yazi::json::Json link11DecodeJson;
 	link11DecodeJson["linktype"] = "link11";
@@ -29,19 +29,19 @@ yazi::json::Json Decode::CrackMessage(string tmp, string &msg, int& type, int& n
 	link11DecodeJson["depreambleframe"] = preambleframe;
 	link11DecodeJson["dephaseframe"] = phaseframe;
 	link11DecodeJson["dedataframe"] = dataframe;
-	link11DecodeJson["originstring"] = msg;
+	link11DecodeJson["originstring"] = "msg";
 
 	return link11DecodeJson;
 }
 
 //解码数据帧
-string Decode::CrackDataFrame(const std::string& msg, int& type, int& n)
+string Decode::CrackDataFrame(const std::string& message, int& type, int& n)
 {
 	//计算数据帧长度
-	int len = msg.length() - 6 * FrameLen - 4 * 30;
+	int len = message.length() - 6 * FrameLen - 4 * 30;
 	
 	//分割出数据帧
-	string dataframe = msg.substr(6 * FrameLen + 2 * 30, len);
+	string dataframe = message.substr(6 * FrameLen + 2 * 30, len);
 	
 	//消息按帧划分,同时完成汉明码解码然后合并
 	int end = FrameLen;//分割定长大小

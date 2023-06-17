@@ -31,8 +31,8 @@ yazi::json::Json Encode::BuildMessage(int type, int n, const string& msg)
 	link11EncodeJson["endframe"] = endframe;
 	link11EncodeJson["result"] = result;
 
-	cout <<"link11 after encode::" << msg << endl;
-	msgUtil.saveToFile(Link11MsgUtil::FILE_NAME, (uint8_t *)msg.c_str(), 10);
+	cout <<"link11 after encode::" << result << endl;
+	msgUtil.saveToFile(Link11MsgUtil::FILE_NAME, result);
 	return link11EncodeJson;
 }
 

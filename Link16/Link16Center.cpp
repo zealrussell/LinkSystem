@@ -65,7 +65,8 @@ yazi::json::Json Link16Center::encoder_Link16(const string &inputs, int32_t n, i
 			encode_str += Tools::handlerSTDP(headerWord, iword, eword, cword);
 			json_res["encryptedMsg"] = encode_str;
 			time(&timep);
-			json_res["dataTime"] = ctime(&timep);
+			string timestr = ctime(&timep);
+			json_res["dataTime"] = timestr.substr(0, timestr.length() - 1);
 			iword.clear();
 			eword.clear();
 			cword.clear();
@@ -167,6 +168,7 @@ yazi::json::Json Link16Center::decoder_Link16(string &raw_data, int32_t &n, int3
 		bitset<3> subSignal = stdp_msg.getInitialWord()->getSubSignal();
 		n = static_cast<int32_t>(signal.to_ulong());
 		m = static_cast<int32_t>(subSignal.to_ulong());
+		std::cout << "LINK16::------------------- n:" << n << " m:" << m << std::endl;
 		// Retrieve data from InitialWord.
 		bit_msg += stdp_msg.getInitialWord()->getData();
 		// Remove InitialWord.
@@ -194,6 +196,7 @@ yazi::json::Json Link16Center::decoder_Link16(string &raw_data, int32_t &n, int3
 	json_res["originMsg"] = Tools::BitStrTostr(raw_data);
 	json_res["decryptedMsg"] = raw_data;
 	time(&timep);
-	json_res["dataTime"] = ctime(&timep);
+	string timestr = ctime(&timep);
+	json_res["dataTime"] = timestr.substr(0, timestr.length() - 1);
 	return json_res;
 }

@@ -95,7 +95,7 @@ std::bitset<72> *Link11MsgUtil::CharArrayToBitset(const uint8_t *charArray, int 
 
 // *****************************************************************************
 
-void Link11MsgUtil::saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum) {
+void Link11MsgUtil::saveToFile(const std::string& FILE_NAME, std::string& data) {
     std::ofstream fout;
     fout.open(FILE_NAME, std::ofstream::out);
     if (fout.is_open() == false) {
@@ -103,8 +103,9 @@ void Link11MsgUtil::saveToFile(const std::string& FILE_NAME, const uint8_t* data
         return;
     }
     std::cout << "FILE:: begin save data to " << FILE_NAME << std::endl;
-    std::string msg = CharArrayToBitStr(data, dataNum);
-    fout << msg;
+    // std::string msg = CharArrayToBitStr(data, dataNum);
+    // fout << msg;
+    fout << data;
     fout.close();
     std::cout << "FILE:: save finish " << std::endl << std::endl;
 }

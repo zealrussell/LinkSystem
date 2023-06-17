@@ -22,7 +22,7 @@ public:
 
     // 将内容保存至文件中
 
-    void saveToFile(const std::string& FILE_NAME, const uint8_t* data, int dataNum);
+    void saveToFile(const std::string& FILE_NAME, std::string& data);
     void getDataFromFile(const std::string& FILENAME, std::string& data);
     void deleteFile(const std::string& FILE_NAME);
 

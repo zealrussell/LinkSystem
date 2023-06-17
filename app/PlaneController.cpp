@@ -16,6 +16,8 @@ extern Json planeJson;
 
 void PlaneController::getPlaneData(const Request &req, Response &resp)
 {   
+    std::cout << "--------------------getPlaneData--------------------" << std::endl;
+    std::cout << planeJson.str() << std::endl;
     resp.json(planeJson.str());
 }
 
@@ -43,7 +45,7 @@ void yazi::app::PlaneController::getData(const Request &req, Response &resp){
     std::ofstream ofs(UAV_DATA_JSON_PATH);
     ofs << std::setw(4) << j << std::endl;
     planeJson = j;
-    std::cout << "-------------------getData--------------------" << std::endl;
+    std::cout << "-------------------getData--------------------" << std::endl << std::endl << std::endl;
     
 	resp.html("hello, I have reveived");
 };

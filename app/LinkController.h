@@ -13,7 +13,7 @@ namespace yazi
     namespace app
     {
 
-        // link数据链
+        // link数据链：完成编码、转换功能
         class LinkController : public Controller
         {
         public:
@@ -38,6 +38,7 @@ namespace yazi
             Link16Center link16Center;
             Link22Center link22Center;
 
+            // 将数据从json文件中读取出来，存到结构体中
             void preparePlaneData();
         };
 

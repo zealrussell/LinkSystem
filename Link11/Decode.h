@@ -14,7 +14,7 @@ using namespace std;
 class Decode
 {
 public:
-	yazi::json::Json CrackMessage(string data, string &msg, int &type, int &n);
+	yazi::json::Json CrackMessage(const std::string &data, string &msg, int &type, int &n);
 
 private:
 	string CrackDataFrame(const std::string& msg, int &type, int& n);
