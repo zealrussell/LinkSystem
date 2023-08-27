@@ -64,6 +64,7 @@ void yazi::app::LinkController::link11_encode(const Request &req, Response &resp
 				
 	} else if (n == 97) {
 		// M.9G 数据链基准点位置报文
+		type = 1;
 		msg = "benchmark:x=116.0;y=22.61;z=100";
 	} else if (n == 62) {
 		// M.6B 电子战支援主要报文
@@ -109,7 +110,7 @@ void yazi::app::LinkController::link16_encode(const Request &req, Response &resp
 	if (n == 28 && m == 20) {
 		// J28.20 文本消息
 		msg = "This is a text message";
-	} else if (n == 1 && m == 1) {
+	} else if (n == 0 && m == 1) {
 		// J1.1 测试消息
 		msg = "link16 test";
 	} else if (n == 28 && m == 7) {
@@ -282,7 +283,7 @@ void yazi::app::LinkController::from16to11(const Request &req, Response &resp)
 		type = 1;
 		msg_11 = msg_16;
 	}
-	else if (n_16 == 1 && m_16 == 1)
+	else if (n_16 == 0 && m_16 == 1)
 	{
 		// 2. 转译: J0.1 测试 => M.0 测试
 		n_11 = 0;
@@ -380,7 +381,7 @@ void yazi::app::LinkController::from22to11(const Request &req, Response &resp)
 
 		msg_11 = "benchmark:" + msg_22.substr(msg_22.find_first_of(":") + 1);
 	} else if (n_22 == 0 && m_22 == 1 && p_22 == 2) {
-		// 3. 删译：F00.1-2 电子战 位置 => M.62 电子战支援主要报文
+		// 3. 删译：F00.1-2 电子战 位置 => M.6B 电子战支援主要报文
 		n_11 = 62;
 		type_11 = 1;
 

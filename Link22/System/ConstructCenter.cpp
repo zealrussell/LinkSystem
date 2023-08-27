@@ -18,64 +18,6 @@ ConstructCenter::ConstructCenter(){
 }
 
 
-uint8_t *ConstructCenter::beginAssemble (const std::bitset<72> &b1, const std::bitset<72> &b2) {
-    std::bitset<72> p[2];
-    p[0] = b1;
-    p[1] = b2;
-    Json dataJson;
-    printf("begin assembel\n");
-    uint8_t *aesCode = beginAes(p, 2);
-    uint8_t *crcCode = beginCrc(aesCode, 18);
-    uint8_t *rsCode = beginRs(crcCode, aesCode,18);
-    printf("...assembel\n");
-
-    dataJson["aes"] = msgUtil.CharArrayToBitStr(aesCode, 16);
-    dataJson["crc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
-    dataJson["rs"] = msgUtil.CharArrayToBitStr(rsCode, 36);
-    link22EncodeJson["data"].append(dataJson);
-
-    delete aesCode;
-    delete crcCode;
-
-    return rsCode;
-}
-
-/**
- * 解码过程
- * @param data 36个消息
- * @return 解码后的18个消息
- */
-uint8_t *ConstructCenter::beginDisassemble(const uint8_t *data) {
-
-    uint8_t *rsCode = beginDeRs(data,36);
-    uint8_t crcCode[2];
-    uint8_t aesCode[18];
-
-    Json link22DecodeDataJson;
-    link22DecodeDataJson["ders"] = msgUtil.CharArrayToBitStr(data, 36);
-
-    // 从rsCode中提取crcCode和aesCode
-    memcpy(crcCode, rsCode, 2 * sizeof(uint8_t));
-    memcpy(aesCode, rsCode + 3 * sizeof(uint8_t), 18 * sizeof(uint8_t));
-    delete rsCode;
-
-    link22DecodeDataJson["decrc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
-    link22DecodeDataJson["deaes"] = msgUtil.CharArrayToBitStr(aesCode, 18);
-    link22DecodeJson["data"].append(link22DecodeDataJson);
-
-    // 通过比较crcCode，判断传输过程中是否发生错误
-    bool crcFlag = beginDeCrc(crcCode, aesCode, 18);
-    if (!crcFlag) {
-        printf("ERROR:: CRC code checked failed!!!\n");
-        return nullptr;
-    }
-
-    uint8_t *message = beginDeAes(aesCode, 18);
-
-    return message;
-}
-
-
 void ConstructCenter::initCenter() {
     aes.set_key(key);
     aes.set_mode(MODE_OFB);
@@ -267,6 +209,66 @@ Json ConstructCenter::constructMessage(const std::string &msg, int n, int m, int
 
     return link22EncodeJson;
 }
+
+
+
+uint8_t *ConstructCenter::beginAssemble (const std::bitset<72> &b1, const std::bitset<72> &b2) {
+    std::bitset<72> p[2];
+    p[0] = b1;
+    p[1] = b2;
+    Json dataJson;
+    printf("begin assembel\n");
+    uint8_t *aesCode = beginAes(p, 2);
+    uint8_t *crcCode = beginCrc(aesCode, 18);
+    uint8_t *rsCode = beginRs(crcCode, aesCode,18);
+    printf("...assembel\n");
+
+    dataJson["aes"] = msgUtil.CharArrayToBitStr(aesCode, 16);
+    dataJson["crc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
+    dataJson["rs"] = msgUtil.CharArrayToBitStr(rsCode, 36);
+    link22EncodeJson["data"].append(dataJson);
+
+    delete aesCode;
+    delete crcCode;
+
+    return rsCode;
+}
+
+/**
+ * 解码过程
+ * @param data 36个消息
+ * @return 解码后的18个消息
+ */
+uint8_t *ConstructCenter::beginDisassemble(const uint8_t *data) {
+
+    uint8_t *rsCode = beginDeRs(data,36);
+    uint8_t crcCode[2];
+    uint8_t aesCode[18];
+
+    Json link22DecodeDataJson;
+    link22DecodeDataJson["ders"] = msgUtil.CharArrayToBitStr(data, 36);
+
+    // 从rsCode中提取crcCode和aesCode
+    memcpy(crcCode, rsCode, 2 * sizeof(uint8_t));
+    memcpy(aesCode, rsCode + 3 * sizeof(uint8_t), 18 * sizeof(uint8_t));
+    delete rsCode;
+
+    link22DecodeDataJson["decrc"] = msgUtil.CharArrayToBitStr(crcCode, 2);
+    link22DecodeDataJson["deaes"] = msgUtil.CharArrayToBitStr(aesCode, 18);
+    link22DecodeJson["data"].append(link22DecodeDataJson);
+
+    // 通过比较crcCode，判断传输过程中是否发生错误
+    bool crcFlag = beginDeCrc(crcCode, aesCode, 18);
+    if (!crcFlag) {
+        printf("ERROR:: CRC code checked failed!!!\n");
+        return nullptr;
+    }
+
+    uint8_t *message = beginDeAes(aesCode, 18);
+
+    return message;
+}
+
 
 // 填充，生成F系列消息
 uint8_t *ConstructCenter::beginConstruct(const std::string &msg, int type, int n, int p, int m) {
